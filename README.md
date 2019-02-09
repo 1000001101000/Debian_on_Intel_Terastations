@@ -5,13 +5,13 @@ Buffalo's Intel-based Terastations are very similar to a fairly typical PC with 
 
 The specific issues I'm currently addressing are:
 
-###Hotswap bays
+### Hotswap bays
 When these devices startup they scan each drive bay to determine which have drives and enable power for just those bays. Normally the ability to add drives to an empty bay is handled by Buffalo's software. To replicate this behaviour under Debian it is necessary to add a kernel module which allows us to access the GPIO pins used to detect drives and enable power to the bays.
 
 I've put together a script to automate builing that kernel module and another script which enables power to all the bays at startup. 
 
-###Boot loader
+### Boot loader
 Typically you'll want to have your boot/root partitions replicated across each disk in the device so that the device can still boot in the event that the first drive fails. Although Debian will automatically update your Grub configuration for you when a configuration change is needed it will only install the updated Grub to one drive. I've put together a script which autmations scanning for drives with Grub setup and updates all of them with the latest configuration.
 
-###Headless installer
+### Headless installer
 Since you can hook up a keyboard and monitor directly to these devices you can use one of the installer images provided by Debian, but I'm planning to provide a custom image which allows headless installs over ssh and automatically includes the scripts from this project.
