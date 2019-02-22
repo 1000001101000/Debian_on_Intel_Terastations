@@ -17,8 +17,22 @@ To install these manually:
 * Copy hotswap.service to /etc/systemd/system/
 * Run systemctl enable hotswap.service
 
-### Boot loader
-Typically you'll want to have your boot/root partitions replicated across each disk in the device so that the device can still boot in the event that the first drive fails. Although Debian will automatically update your Grub configuration for you when a configuration change is needed it will only install the updated Grub to one drive. I've put together a script which autmations scanning for drives with Grub setup and updates all of them with the latest configuration.
+### Boot loader (update_boot.sh)
+Typically you'll want to have your boot/root partitions replicated across each disk (via RAID1) so that the device can still boot in the event that the first drive fails. Although Debian will automatically update your Grub configuration for you when a configuration change is needed it will only install the updated Grub to boot sector of one drive. I've put together a script that automatically determines which drive(s) contain /boot and installs Grub to the boot sector of each. 
 
-### Headless installer
-Since you can hook up a keyboard and monitor directly to these devices you can use one of the installer images provided by Debian, but I'm planning to provide a custom image which allows headless installs over ssh and automatically includes the scripts from this project.
+To install manually:
+* Copy update_boot.sh to /usr/local/bin/
+* Create the /etc/initramfs/post-update.d/ directory
+* Create a symlink of update_boot.sh in /etc/initramfs/post-update.d/
+
+### Headless installer (/installer-image/)
+Although you can hook up a USB keyboard and VGA monitor and install Debian using one of the installer images provided by Debian, I've provided and image which allows you to run the install remotely over SSH and automatically installs the tools I listed above. I've included the scripts I use to build the image in the "build" directory.
+
+To use it:
+* Download the .iso file from the installer-image directory
+* Write the image to a USB drive (dd if=ts-stretch-installer.iso of=/dev/sdx bs=1M)
+* Insert the drive into one of the devices USB 2.0 ports
+* Flip the switch on the back of the device to "USB" and reboot it.
+* After a few minutes; log into the device via SSH, the username is installer and the password is install
+* Run through the Debian install like normal.
+* When the install finishes flip the switch on the back of the device to "HDD" and reboot it.
