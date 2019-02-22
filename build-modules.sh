@@ -8,7 +8,7 @@ kernels="$(ls /lib/modules)"
 #quick and dirty check that internet is up so that apt calls can succeed
 for x in {1..10}
 do
-    ping -c 4 google.com
+    ping -c 4 google.com >/dev/null 2>&1
     if [ $? -eq 0 ]; then
       break
     fi
@@ -17,14 +17,14 @@ done
 
 for kernel in $kernels
 do
+    k_ver="$(echo $kernel | cut -d'.' -f1-2)"
+    k_ver_long="$(echo $kernel | cut -d'-' -f1-2)"
     for module in $modules
     do
         find /lib/modules/$kernel/ | grep $module.ko > /dev/null
         if [ $? -eq 0 ]; then
             continue
         fi
-        k_ver="$(echo $kernel | cut -d'.' -f1-2)"
-        k_ver_long="$(echo $kernel | cut -d'-' -f1-2)"
         apt-get install -yq linux-headers-$kernel linux-source-$k_ver linux-headers-$k_ver_long-common ##> /dev/null
         cd /usr/src
         cp -rf linux-headers-$kernel build-temp-$kernel
@@ -39,6 +39,8 @@ do
         insmod /lib/modules/$kernel/kernel/$module.ko
     done
     dpkg --purge linux-source-$k_ver
-    rm -r /usr/src/build-temp-$kernel/
+    if [ -d "/usr/src/build-temp-$kernel/" ]; then
+       rm -r /usr/src/build-temp-$kernel/
+    fi
     depmod -a
 done
