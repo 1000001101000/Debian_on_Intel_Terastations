@@ -1,5 +1,14 @@
 #!/bin/bash
 
+#sata0 -> GPIO2
+#sata1 -> GPIO3
+#sata2 -> GPIO4
+#sata3 -> GPIO5
+#sata4 -> GPIO15
+#sata5 -> GPIO9
+#sata6 -> GPIO13
+#sata7 -> GPIO10
+
 modprobe gpio-ich
 
 get_gpio_value()
@@ -18,7 +27,30 @@ get_gpio_value()
     return 0
 }
 
-bay_gpios="453 454 455 456 460 461 462 464 467 469 471"
+gpio_chips="$(ls /sys/class/gpio/ | grep gpiochip)"
+gpio_base=""
+
+for chip in $gpio_chips
+do
+    dir="/sys/class/gpio/$chip"
+    if [ "$(cat $dir/label)" == "gpio_ich" ]; then
+        gpio_base="$(cat $dir/base)"
+    fi
+done
+
+if [ "$gpio_base" == "" ]; then
+    echo "ich gpio chip not found"
+    exit
+fi
+
+gpio_offsets="2 3 4 5 15 9 13 10"
+bay_gpios=""
+
+for gpio in $gpio_offsets
+do
+    bay_gpios="$bay_gpios $(($gpio_base+$gpio))"
+done
+
 new_array=""
 
 while true

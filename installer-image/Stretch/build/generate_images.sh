@@ -12,6 +12,7 @@ cd ..
 
 cp ../../../*.sh payload/source/
 cp ../../../*.service payload/source/
+cp ../../../*.patch payload/source/
 
 xorriso -osirrox on -indev debian-files/mini.iso -extract / iso/
 cp iso/initrd.gz .

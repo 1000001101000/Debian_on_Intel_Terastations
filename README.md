@@ -19,12 +19,31 @@ To install these manually:
 * Run systemctl enable hotswap.service
 
 ### Boot loader (update_boot.sh)
-Typically you'll want to have your boot/root partitions replicated across each disk (via RAID1) so that the device can still boot in the event that the first drive fails. Although Debian will automatically update your Grub configuration for you when a configuration change is needed it will only install the updated Grub to boot sector of one drive. I've put together a script that automatically determines which drive(s) contain /boot and installs Grub to the boot sector of each. 
+Typically you'll want to have your boot/root partitions replicated across each disk (via RAID1) so that the device can still boot in the event that the first drive fails. Although Debian will automatically update your Grub configuration for you when a configuration change is needed it will only install the updated Grub to boot sector of one drive. I've put together a script that automatically determines which drive(s) contain /boot and installs Grub to the boot sector of each. I set it up to run whenever update-initramfs runs which covers most scenarios where grub needs to be updated (ie kernel updates and filesystem/raid changes). You should run it manually any other time you make a change to the grub configuration.
 
 To install manually:
 * Copy update_boot.sh to /usr/local/bin/
 * Create the /etc/initramfs/post-update.d/ directory
 * Create a symlink of update_boot.sh in /etc/initramfs/post-update.d/
+
+## Fans
+The fan speeds can be monitored/controlled via the IT8721f chip. Fortunately, the necessary driver is included with the kernel. The fan speed can be adjusted automatically using fancontrol and monitored using lmsensors.
+
+To set it up manually:
+* install lm-sensors and fancontrol "apt-get install lm-sensors fancontrol"
+* load the it87 kernel module "modprobe it87"
+* add the module to /etc/modules "echo it87 >> /etc/modules"
+* run "pwmconfig" and follow the prompts to set up a fancontrol config.
+* run "sensors" to monitor you temperature and fan speeds
+  note: the voltage sensors will return strange data which is probably best ignored. 
+
+## Buttons (button_example.sh, it87-gpio.patch, build-modules.sh)
+These devices use some spare pins from the IT8721f chip to control the "display" and "function" buttons on the front. The GPIO function of the IT8721 isn't normally supported by the gpio-it87 module so it is necessary to apply a patch to enable it.  I've included the necessary patch and added logic to build-modules.sh to automatically apply it. I've also included a script that demonstrates how to read the GPIO values to determine when one of the buttons is pressed.
+
+To use it:
+* Copy button_example.sh to /usr/local/bin/ (the installer image will do that automatically if you use it)
+* Run build-module.sh (this happens at startup if you use the installer or set it up in the hotswap section)
+* Run button_example.sh, the script will output the GPIO values each time you press/release one of the buttons.
 
 ### Headless installer (/installer-image/)
 Although you can hook up a USB keyboard and VGA monitor and install Debian using one of the installer images provided by Debian, I've provided and image which allows you to run the install remotely over SSH and automatically installs the tools I listed above. I've included the scripts I use to build the image in the "build" directory.

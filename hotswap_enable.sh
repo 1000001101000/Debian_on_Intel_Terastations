@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#452 ata2
-#457 ata3
-#458 ata4
-#468 ata1
-#476/507 ata5
-#483 ata6
-#484 ata7
-#485 ata8
+#HDD_Power0 --> GPIO17
+#HDD_Power1 --> GPIO1
+#HDD_Power2 --> GPIO6
+#HDD_Power3 --> GPIO7
+#HDD_Power4 --> GPIO25 or GPIO56
+#HDD_Power5 --> GPIO32
+#HDD_Power6 --> GPIO33
+#HDD_Power7 --> GPIO34
 
 gpio_enable()
 {
@@ -29,7 +29,22 @@ gpio_enable()
 /usr/local/bin/build-modules.sh
 modprobe gpio-ich
 
-model_gpios="480 481 482"
+gpio_chips="$(ls /sys/class/gpio/ | grep gpiochip)"
+gpio_base=""
+for chip in $gpio_chips
+do
+    dir="/sys/class/gpio/$chip"
+    if [ "$(cat $dir/label)" == "gpio_ich" ]; then
+        gpio_base="$(cat $dir/base)"
+    fi
+done
+
+if [ "$gpio_base" == "" ]; then
+    echo "ich gpio chip not found"
+    exit
+fi
+
+model_gpios="$(($gpio_base+29)) $(($gpio_base+30)) $(($gpio_base+31))"
 model=""
 for gpio in $model_gpios
 do
@@ -41,8 +56,8 @@ do
 done
 
 # enable first 2 bays
-gpio_enable 468
-gpio_enable 452
+gpio_enable "$(($gpio_base+17))"
+gpio_enable "$(($gpio_base+1))"
 
 ## if device reports as 2-bay exit
 if [ "$model" == "000" ]; then
@@ -50,8 +65,8 @@ if [ "$model" == "000" ]; then
 fi
 
 # enable next 2 bays
-gpio_enable 457
-gpio_enable 458
+gpio_enable "$(($gpio_base+6))"
+gpio_enable "$(($gpio_base+7))"
 
 ## if device reports as 4-bay exit
 if [ "$model" == "100" ] || [ "$model" == "001" ]; then
@@ -59,15 +74,14 @@ if [ "$model" == "100" ] || [ "$model" == "001" ]; then
 fi
 
 # enable next 2 bays
-gpio_enable 476
-gpio_enable 507
-gpio_enable 483
+gpio_enable "$(($gpio_base+25))"
+gpio_enable "$(($gpio_base+56))"
+gpio_enable "$(($gpio_base+32))"
 
 ## if device reports as 6-bay exit
 if [ "$model" == "010" ]; then
     exit
 fi
 
-gpio_enable 484
-gpio_enable 485
-
+gpio_enable "$(($gpio_base+33))"
+gpio_enable "$(($gpio_base+34))"
