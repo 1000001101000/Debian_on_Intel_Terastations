@@ -1,7 +1,7 @@
 ## intel gpio drivers
-opts="CONFIG_GPIO_IT87=m CONFIG_GPIO_ICH=m"
-modules="gpio-it87 gpio-ich"
-patches="it87-gpio.patch"
+opts="CONFIG_GPIO_IT87=m CONFIG_GPIO_ICH=m CONFIG_SENSORS_IT87=m"
+modules="gpio-it87 gpio-ich it87"
+patches="it87-gpio.patch it87-hwmon.patch"
 
 num_cpu="$(cat /proc/cpuinfo | grep -e ^processor  | wc -l)"
 kernels="$(ls /lib/modules)"
@@ -64,10 +64,10 @@ do
     do
         echo "$(find | grep /$module.ko)"
         cp -v "$(find | grep /$module.ko)" /lib/modules/$kernel/kernel/
-        #cp -v $src_dir/$module.ko /lib/modules/$kernel/kernel/
+        rmmod $module
         insmod /lib/modules/$kernel/kernel/$module.ko
     done
-#    dpkg --purge linux-source-$k_ver
+    dpkg --purge linux-source-$k_ver
     if [ -d "/usr/src/build-temp-$kernel/" ]; then
        rm -r /usr/src/build-temp-$kernel/
     fi
