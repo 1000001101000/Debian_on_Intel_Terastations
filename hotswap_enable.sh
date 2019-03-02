@@ -16,7 +16,7 @@ gpio_enable()
        echo $1 > /sys/class/gpio/export 2>/dev/null
     fi
     if [ ! -d "$export_folder" ]; then
-       exit
+       return 0
     fi
     if [ "$(cat $export_folder/direction)" != "out" ]; then
        echo "out" > "$export_folder/direction"
@@ -26,8 +26,9 @@ gpio_enable()
     fi
 }
 
-/usr/local/bin/build-modules.sh
 modprobe gpio-ich
+
+bay_gpios="1 6 7 17 25 32 33 34 56"
 
 gpio_chips="$(ls /sys/class/gpio/ | grep gpiochip)"
 gpio_base=""
@@ -44,44 +45,7 @@ if [ "$gpio_base" == "" ]; then
     exit
 fi
 
-model_gpios="$(($gpio_base+29)) $(($gpio_base+30)) $(($gpio_base+31))"
-model=""
-for gpio in $model_gpios
+for gpio in $bay_gpios
 do
-    export_folder="/sys/class/gpio/gpio$gpio"
-    if [ ! -d "$export_folder" ]; then
-      echo $gpio > /sys/class/gpio/export
-    fi
-    model="$model$(cat $export_folder/value)"
+    gpio_enable "$(($gpio_base+$gpio))"
 done
-
-# enable first 2 bays
-gpio_enable "$(($gpio_base+17))"
-gpio_enable "$(($gpio_base+1))"
-
-## if device reports as 2-bay exit
-if [ "$model" == "000" ]; then
-    exit
-fi
-
-# enable next 2 bays
-gpio_enable "$(($gpio_base+6))"
-gpio_enable "$(($gpio_base+7))"
-
-## if device reports as 4-bay exit
-if [ "$model" == "100" ] || [ "$model" == "001" ]; then
-    exit
-fi
-
-# enable next 2 bays
-gpio_enable "$(($gpio_base+25))"
-gpio_enable "$(($gpio_base+56))"
-gpio_enable "$(($gpio_base+32))"
-
-## if device reports as 6-bay exit
-if [ "$model" == "010" ]; then
-    exit
-fi
-
-gpio_enable "$(($gpio_base+33))"
-gpio_enable "$(($gpio_base+34))"
