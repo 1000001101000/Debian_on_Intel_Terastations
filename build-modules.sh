@@ -1,3 +1,4 @@
+#!/bin/bash
 ## intel gpio drivers
 opts="CONFIG_GPIO_IT87=m CONFIG_GPIO_ICH=m CONFIG_SENSORS_IT87=m"
 modules="gpio-it87 gpio-ich it87"
@@ -5,6 +6,9 @@ patches="it87-gpio.patch it87-hwmon.patch"
 
 num_cpu="$(cat /proc/cpuinfo | grep -e ^processor  | wc -l)"
 kernels="$(ls /lib/modules)"
+
+exclusions="$(cat /usr/local/etc/module_exclude.txt)"
+
 
 #quick and dirty check that internet is up so that apt calls can succeed
 for x in {1..10}
@@ -41,7 +45,7 @@ do
     tar tf ../linux-source-$k_ver.tar.xz > tmpfilelist
     for module in $tmpmods
     do
-        src_path="$(cat tmpfilelist | grep $module)"
+        src_path="$(cat tmpfilelist | grep $module.c)"
 	src_dir="$(dirname $src_path)"
         dirlist+=($src_dir)
     done
@@ -58,7 +62,7 @@ do
     for src_dir in $dirlist
     do
         src_dir="${src_dir#*/}"
-        make -j $num_cpu M="$src_dir" $opts
+        make -j $num_cpu M="$src_dir" $opts $exclusions
     done
     for module in $tmpmods
     do
