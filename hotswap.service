@@ -1,7 +1,7 @@
 [Unit]
 Description=Terastation Hotswap
-Wants=network-online.target                                                                                  
-After=network-online.target
+Wants=module_build.service
+After=module_build.service
 
 [Service]
 ExecStart=/usr/local/bin/hotswap_enable.sh

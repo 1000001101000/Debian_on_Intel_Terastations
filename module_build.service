@@ -1,0 +1,11 @@
+[Unit]
+Description=Terastation Hotswap
+Wants=network-online.target                                                                                  
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/build-modules.sh
+
+[Install]
+WantedBy=multi-user.target
