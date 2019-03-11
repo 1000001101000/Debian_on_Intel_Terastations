@@ -45,6 +45,16 @@ To use it:
 * Run build-module.sh (this happens at startup if you use the installer or set it up in the hotswap section)
 * Run button_example.sh, the script will output the GPIO values each time you press/release one of the buttons.
 
+## LCD Screen/LEDs/Buzzer
+The LCD screen, LEDs and Buzzer are all controlled by an internal micorcontroller connected via an internal serial connection. Due to the complexity of working with chip and because it is used by Intel and non-Intel Terastations I've created a seperate project for those scripts.
+
+For the python library used to communicate with this chip and some example scripts see:
+
+https://github.com/1000001101000/Python_buffalo_libmicon/blob/master/README.md
+
+For the installer I've added lcd_init.service which initializes the LCD display and power LED at startup.
+
+
 ### Headless installer (/installer-image/)
 Although you can hook up a USB keyboard and VGA monitor and install Debian using one of the installer images provided by Debian, I've provided and image which allows you to run the install remotely over SSH and automatically installs the tools I listed above. I've included the scripts I use to build the image in the "build" directory.
 
