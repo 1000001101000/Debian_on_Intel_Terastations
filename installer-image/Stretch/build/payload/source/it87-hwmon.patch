@@ -1,0 +1,11 @@
+diff -ruN clean/drivers/hwmon/it87.c patch/drivers/hwmon/it87.c
+--- clean/drivers/hwmon/it87.c	2019-03-02 09:13:17.184841609 -0600
++++ patch/drivers/hwmon/it87.c	2019-03-02 09:14:20.872326576 -0600
+@@ -2634,7 +2634,6 @@
+ 					sio_data->skip_fan |= BIT(4);
+ 				break;
+ 			case it8720:
+-			case it8721:
+ 			case it8728:
+ 				if (!(reg & BIT(5)))
+ 					sio_data->skip_fan |= BIT(3);
