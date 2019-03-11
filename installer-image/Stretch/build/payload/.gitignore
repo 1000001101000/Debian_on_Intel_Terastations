@@ -1,1 +1,5 @@
-source/*
+source/*.sh
+source/*.service
+source/*.txt
+source/*.conf
+source/*.patch
