@@ -1,3 +1,5 @@
+![alt text](https://static.miraheze.org/buffalonaswiki/thumb/5/5f/Tsx86_lcd1.jpg/800px-Tsx86_lcd1.jpg)
+
 # Debian_on_Intel_Terastations
 Tools for running Debian effectively on Intel-based Buffalo Terastations (TS/WS-WVHL/QVHL/6VHL/8VHL/RVHL, TS4000,TS5000)
 
