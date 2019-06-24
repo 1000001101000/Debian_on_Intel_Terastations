@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/startup_display/startup_display
+ExecStart=/usr/local/bin/micon_scripts/startup_display
 
 [Install]
 WantedBy=multi-user.target

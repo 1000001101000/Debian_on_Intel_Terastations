@@ -1,4 +1,4 @@
-##requires gzip, faketime, rsync, wget, cpio, grub2, xorriso
+##requires gzip, rsync, wget, cpio, grub2, xorriso
 
 distro="stretch"
 
@@ -15,6 +15,7 @@ cp ../../../*.service payload/source/
 cp ../../../*.patch payload/source/
 cp ../../../it8721.conf payload/source/
 cp ../../../module_exclude.txt payload/source/
+cp -r ../../../micon_scripts payload/source/
 
 xorriso -osirrox on -indev debian-files/mini.iso -extract / iso/
 cp iso/initrd.gz .
