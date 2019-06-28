@@ -57,7 +57,7 @@ do
     done
     for patch in $patches
     do
-        patch -p1 < /usr/src/$patch
+        patch -t -p1 < /usr/src/$patch
     done
     for src_dir in $dirlist
     do
