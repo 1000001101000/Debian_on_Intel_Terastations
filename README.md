@@ -68,3 +68,4 @@ To use it:
 * After a few minutes; log into the device via SSH, the username is installer and the password is install
 * Run through the Debian install like normal.
 * When the install finishes flip the switch on the back of the device to "HDD" and reboot it.
+
