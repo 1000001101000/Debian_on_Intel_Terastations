@@ -2,6 +2,9 @@
 
 distro="buster"
 
+mkdir debian-files output
+mkdir -p payload/source
+
 cd debian-files
 if [ -d "tmp" ]; then
    rm -r "tmp/"
