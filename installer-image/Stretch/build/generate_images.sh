@@ -19,6 +19,7 @@ cp ../../../*.patch payload/source/
 cp ../../../it8721.conf payload/source/
 cp ../../../module_exclude.txt payload/source/
 cp -r ../../../micon_scripts payload/source/
+cp ../../../micro-evtd payload/source/
 
 xorriso -osirrox on -indev debian-files/mini.iso -extract / iso/
 cp iso/initrd.gz .
@@ -42,6 +43,7 @@ if [ $? -ne 0 ]; then
 fi
 cd ..
 gzip initrd
+#cat initrd | xz --check=crc32 -9 > initrd.xz
 if [ $? -ne 0 ]; then
         echo "failed to pack initrd, quitting"
         exit
