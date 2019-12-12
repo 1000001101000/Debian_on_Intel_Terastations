@@ -1,6 +1,7 @@
 #!/bin/bash
 
 distros="Stretch Buster"
+svpwd="$(pwd)"
 
 for distro in $distros
 do
@@ -12,6 +13,6 @@ do
     cd installer-image/$distro/build/
     sudo ./generate_images.sh
   fi
-
+  cd "$svpwd"
 done
 exit 0
