@@ -4,12 +4,10 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    env:
-      Distro: Buster   
+    runs-on: ubuntu-latest 
     steps: 
     - uses: actions/checkout@v1
     - name: check for updated debian installer
-      run: echo "$(curl http://ftp.nl.debian.org/debian/dists/{{Distro|lower}}/main/installer-amd64/current/images/netboot/mini.iso 2>/dev/null | md5sum)" > /tmp/latest.txt
+      run: echo "$(curl http://ftp.nl.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/mini.iso 2>/dev/null | md5sum)" > /tmp/latest.txt
     - name: display
-      run: diff /tmp/latest.txt installer-image/{{Distro}}/build/last_build.txt
+      run: diff /tmp/latest.txt installer-image/Buster/build/last_build.txt
