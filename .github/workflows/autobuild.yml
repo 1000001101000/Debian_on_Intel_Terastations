@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    #- uses: actions/checkout@v1
     - name: check for updated debian installer
       run: curl http://ftp.nl.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/mini.iso | md5sum
