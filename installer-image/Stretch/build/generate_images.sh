@@ -28,7 +28,7 @@ if [ $? -ne 0 ]; then
         exit
 fi
 
-kernel_ver="$(zcat initrd.gz | cpio -t | grep lib/modules/ | tail -n +1 | head -n 1 | gawk -F/ '{print $3}')"
+kernel_ver="$(zcat initrd.gz | cpio -t | grep -m 1 lib/modules/ | gawk -F/ '{print $3}')"
 
 gunzip initrd.gz
 if [ $? -ne 0 ]; then
