@@ -10,6 +10,6 @@ jobs:
     - name: update apt
       run: sudo apt-get update
     - name: ensure build packages are installed
-      run: sudo apt-get install gzip rsync wget cpio grub2 xorriso
+      run: sudo apt-get install gzip rsync wget cpio grub2 xorriso mtools
     - name: check for updated debian installer
       run: .github/scripts/update_check.sh
