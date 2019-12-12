@@ -10,7 +10,7 @@ do
     echo "image is up to date"
   else
     cd installer-image/$distro/build/
-    ./generate_images.sh
+    sudo ./generate_images.sh
   fi
 
 done
