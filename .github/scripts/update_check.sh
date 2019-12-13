@@ -15,7 +15,7 @@ do
     sudo ./generate_images.sh
   fi
   if [ $? -eq 0 ] && [ -f "output/ts-${distro,,}-installer.iso" ]; then
-    echo "build succeeded, committing to repo"
+    echo "::set-output name=commit_needed::yes"
   fi
   cd "$svpwd"
 done
