@@ -2,7 +2,7 @@ name: Update base installer
 
 on:
   schedule:
-    - cron: 39 17 * * *
+    - cron: 10 * * * *
 
 jobs:
   build:
