@@ -15,5 +15,6 @@ jobs:
       run: .github/scripts/update_check.sh
       id: build_images
     - name: commit new images
+      if: steps.build_images.outputs.commit_needed == "yes"
       run: echo "commit!"
-      if: ${{ steps.build_images.outputs.commit_needed}} == "yes"
+      
