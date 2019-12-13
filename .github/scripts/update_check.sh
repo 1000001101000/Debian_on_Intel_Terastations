@@ -17,6 +17,7 @@ do
   if [ $? -eq 0 ] && [ -f "output/ts-${distro,,}-installer.iso" ]; then
     cp "output/ts-${distro,,}-installer.iso" ..
     cp "/tmp/latest.txt" "last_build.txt"
+    git commit -a -m "generate images based on latest debian installer" 
     echo "::set-output name=commit_needed::yes"
   fi
   cd "$svpwd"
