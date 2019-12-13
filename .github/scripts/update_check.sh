@@ -9,9 +9,13 @@ do
   diff /tmp/latest.txt installer-image/$distro/build/last_build.txt 2>/dev/null
   if [ $? -eq 0 ]; then
     echo "image is up to date"
+    continue
   else
     cd installer-image/$distro/build/
     sudo ./generate_images.sh
+  fi
+  if [ $? -eq 0 ] && [ -f "output/ts-${distro,,}-installer.iso" ]; then
+    echo "build succeeded, committing to repo"
   fi
   cd "$svpwd"
 done
