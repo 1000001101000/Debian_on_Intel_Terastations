@@ -16,5 +16,5 @@ jobs:
       id: build_images
     - name: commit new images
       if: steps.build_images.outputs.commit_needed == 'yes'
-      run: echo "commit!"
+      run: git diff
       
