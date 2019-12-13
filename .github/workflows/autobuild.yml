@@ -1,6 +1,8 @@
 name: Update base installer
 
-on: [push]
+on:
+  schedule:
+    - cron: 00 18 * * *
 
 jobs:
   build:
@@ -16,5 +18,5 @@ jobs:
       id: build_images
     - name: commit new images
       if: steps.build_images.outputs.commit_needed == 'yes'
-      run: git diff
+      run: git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
       
