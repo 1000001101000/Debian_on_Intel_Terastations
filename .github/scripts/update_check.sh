@@ -15,6 +15,8 @@ do
     sudo ./generate_images.sh
   fi
   if [ $? -eq 0 ] && [ -f "output/ts-${distro,,}-installer.iso" ]; then
+    cp "output/ts-${distro,,}-installer.iso" ..
+    cp "/tmp/latest.txt" "last_build.txt"
     echo "::set-output name=commit_needed::yes"
   fi
   cd "$svpwd"
