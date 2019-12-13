@@ -10,7 +10,7 @@ if [ -d "tmp" ]; then
    rm -r "tmp/"
 fi
 
-wget -N "http://ftp.nl.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/mini.iso"
+wget -N "http://ftp.nl.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/mini.iso" 2 >/dev/null
 cd ..
 
 cp ../../../*.sh payload/source/
@@ -25,7 +25,7 @@ xorriso -osirrox on -indev debian-files/mini.iso -extract / iso/
 cp iso/initrd.gz .
 if [ $? -ne 0 ]; then
         echo "failed to retrieve initrd.gz, quitting"
-        exit
+        exit 99
 fi
 
 kernel_ver="$(zcat initrd.gz | cpio -t | grep -m 1 lib/modules/ | gawk -F/ '{print $3}')"
@@ -33,20 +33,19 @@ kernel_ver="$(zcat initrd.gz | cpio -t | grep -m 1 lib/modules/ | gawk -F/ '{pri
 gunzip initrd.gz
 if [ $? -ne 0 ]; then
         echo "failed to unpack initrd.gz, quitting"
-        exit
+        exit 99
 fi
 cd payload
 find . | cpio -v -H newc -o -A -F ../initrd
 if [ $? -ne 0 ]; then
         echo "failed to patch initrd.gz, quitting"
-        exit
+        exit 99
 fi
 cd ..
 gzip initrd
-#cat initrd | xz --check=crc32 -9 > initrd.xz
 if [ $? -ne 0 ]; then
         echo "failed to pack initrd, quitting"
-        exit
+        exit 99
 fi
 
 cp initrd.gz iso/
@@ -55,6 +54,10 @@ cp grub.cfg iso/boot/grub/
 ##
 rm output/*
 grub-mkrescue -o "output/ts-$distro-installer.iso" iso/
+if [ $? -ne 0 ]; then
+        echo "failed to generate image, quitting"
+        exit 99
+fi
 
 rm -r iso/
 rm initrd.gz
