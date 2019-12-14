@@ -5,7 +5,7 @@ svpwd="$(pwd)"
 
 for distro in $distros
 do
-  curl http://ftp.nl.debian.org/debian/dists/${distro,,}/main/installer-amd64/current/images/netboot/mini.iso 2>/dev/null > /tmp/latest.txt
+  curl http://ftp.nl.debian.org/debian/dists/${distro,,}/main/installer-amd64/current/images/netboot/mini.iso 2>/dev/null | md5sum > /tmp/latest.txt
   diff /tmp/latest.txt installer-image/$distro/build/last_build.txt 2>/dev/null
   if [ $? -eq 0 ]; then
     echo "image is up to date"
