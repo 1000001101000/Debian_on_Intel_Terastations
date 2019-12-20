@@ -8,7 +8,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps: 
-    - name: trying to get an env working
+    - name: set env?
       env:
         commit_needed: no
     - name: check for micro-etvd update
