@@ -22,7 +22,7 @@ jobs:
       run: git clone https://github.com/${{github.repository}}
     
     - name: if needed, copy file to repo
-      if: steps.env.commit_needed == 'yes'
+      if: env.commit_needed == 'yes'
       run: cp /tmp/micro-evtd-amd64 ./micro-evtd-amd64
     
     - name: if needed, setup git
