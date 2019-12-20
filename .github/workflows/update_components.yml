@@ -7,7 +7,7 @@ on: [push]
 jobs:
   check:
     env:
-      commit_needed: No
+      commit_needed: no
     runs-on: ubuntu-latest
     steps: 
     - name: check for micro-etvd update
@@ -18,7 +18,7 @@ jobs:
       run: diff /tmp/source /tmp/dest || echo "needs update"; echo "::set-env name=commit_needed::yes"
       
     - name: if needed, clone the repo for update
-      if: steps.env.commit_needed == 'yes'
+      if: commit_needed == 'yes'
       run: git clone https://github.com/${{github.repository}}
     
     - name: if needed, copy file to repo
