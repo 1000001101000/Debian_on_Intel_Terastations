@@ -7,10 +7,9 @@ on: [push]
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      commit_needed: no
     steps: 
-    - name: set env?
-      env:
-        commit_needed: no
     - name: check for micro-etvd update
       run: curl https://github.com/1000001101000/micro-evtd/raw/master/bins/micro-evtd-amd64 2>/dev/null | md5sum > /tmp/source 
     - name: check for micro-etvd update
