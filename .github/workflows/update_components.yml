@@ -19,7 +19,7 @@ jobs:
       
     - name: if needed, clone the repo for update
       if: env.commit_needed == 'yes'
-      run: git clone https://github.com/${{github.repository}}
+      run: git clone https://github.com/${{github.repository}}; cd ${{github.repositorysplit('/')[1]}}
     
     - name: if needed, copy file to repo
       if: env.commit_needed == 'yes'
