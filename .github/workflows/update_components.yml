@@ -6,6 +6,8 @@ on: [push]
 
 jobs:
   check:
+    env:
+      commit_needed: No
     runs-on: ubuntu-latest
     steps: 
     - name: check for micro-etvd update
