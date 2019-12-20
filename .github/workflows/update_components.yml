@@ -5,9 +5,9 @@ on: [push]
     #- cron: 32 20 * * *
 
 jobs:
-  env:
-    commit_needed: no
   check:
+    env:
+      commit_needed: no
     runs-on: ubuntu-latest
     steps: 
     - name: check for micro-etvd update
