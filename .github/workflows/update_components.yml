@@ -24,7 +24,7 @@ jobs:
     
     - name: if needed, copy file to repo
       if: env.commit_needed == 'yes'
-      run: pwd; cp -v /tmp/micro-evtd-amd64 micro-evtd; ls -l
+      run: pwd; cp -v /tmp/micro-evtd-amd64 micro-evtd2; ls -l
       working-directory: "${{env.repo_dir}}"
     
     - name: if needed, setup git
