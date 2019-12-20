@@ -34,7 +34,7 @@ jobs:
       
     - name: set rebuild needed flag 
       if: env.commit_needed == 'yes'
-      run: echo yes > .github/workflows/rebuild.txt
+      run: echo yes > .rebuild
       working-directory: "${{env.repo_dir}}"
       
     - name: if needed, commit
