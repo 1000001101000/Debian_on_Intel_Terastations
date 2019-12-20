@@ -1,5 +1,7 @@
 name: Update Components
 
+##trying to do this all in yaml, even though it is deeply painful
+
 on: [push]
   #schedule: 
     #- cron: 32 20 * * *
