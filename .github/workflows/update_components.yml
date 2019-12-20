@@ -12,9 +12,9 @@ jobs:
       repo_dir: .
     steps: 
     - name: check for micro-etvd update
-      run: curl https://github.com/1000001101000/micro-evtd/raw/master/bins/micro-evtd-amd64 2>/dev/null | md5sum > /tmp/source 
+      run: wget -O /tmp/micro-evtd-amd64 "https://github.com/1000001101000/micro-evtd/raw/master/bins/micro-evtd-amd64" 2>/dev/null; cat /tmp/micro-evtd-amd64 | md5sum > /tmp/source 
     - name: check for micro-etvd update
-      run: wget -O /tmp/micro-evtd-amd64 https://github.com/${{github.repository}}/raw/master/micro-evtd 2>/dev/null; cat /tmp/micro-evtd-amd64 | md5sum > /tmp/dest
+      run: curl https://github.com/${{github.repository}}/raw/master/micro-evtd 2>/dev/null | md5sum > /tmp/dest
     - name: check for micro-etvd update
       run: diff /tmp/source /tmp/dest || echo "needs update"; echo "::set-env name=commit_needed::yes"
       
@@ -24,7 +24,7 @@ jobs:
     
     - name: if needed, copy file to repo
       if: env.commit_needed == 'yes'
-      run: pwd; cp -v /tmp/micro-evtd-amd64 micro-evtd2; diff micro-evtd micro-evtd2
+      run: cp -v /tmp/micro-evtd-amd64 micro-evtd
       working-directory: "${{env.repo_dir}}"
     
     - name: if needed, setup git
