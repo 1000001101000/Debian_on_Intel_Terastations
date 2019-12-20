@@ -13,14 +13,14 @@ jobs:
     - name: check for micro-etvd update
       run: wget -o /tmp/micro-evtd-amd64 https://github.com/${{github.repository}}/raw/master/micro-evtd 2>/dev/null; cat /tmp/micro-evtd-amd64 | md5sum > /tmp/dest
     - name: check for micro-etvd update
-      run: diff /tmp/source /tmp/dest || echo "needs update"; echo "::set-output name=commit_needed::yes"
+      run: diff /tmp/source /tmp/dest || echo "needs update"; echo "::set-env name=commit_needed::yes"
       
     - name: if needed, clone the repo for update
-      if: steps.build_images.outputs.commit_needed == 'yes'
+      if: steps.env.commit_needed == 'yes'
       run: git clone https://github.com/${{github.repository}}
     
     - name: if needed, copy file to repo
-      if: steps.build_images.outputs.commit_needed == 'yes'
+      if: steps.env.commit_needed == 'yes'
       run: cp /tmp/micro-evtd-amd64 ./micro-evtd-amd64
     
     - name: if needed, setup git
