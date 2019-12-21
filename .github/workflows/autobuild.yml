@@ -60,7 +60,7 @@ jobs:
       
     - name: if needed, commit
       if: env.build_needed == 'yes'
-      run: git commit; git commit -a -m "update files from external projects"
+      run: git commit -v -a -m "update files from external projects"
       working-directory: "${{env.repo_dir}}"
   
   #  - name: commit new images
