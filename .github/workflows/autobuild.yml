@@ -63,7 +63,7 @@ jobs:
       run: git commit -v -a -m "update files from external projects"
       working-directory: "${{env.repo_dir}}"
   
-  #  - name: commit new images
-  #    if: steps.build_images.outputs.commit_needed == 'yes'
-  #    run: git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
+    - name: commit new images
+      if: steps.build_images.outputs.commit_needed == 'yes'
+      run: git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
       
