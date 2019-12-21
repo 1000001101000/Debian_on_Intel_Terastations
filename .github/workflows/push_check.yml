@@ -21,11 +21,11 @@ jobs:
    - name: set rebuild flag for autobuild process
      run: echo yes > .rebuild
      
-    - name: setup git
-      run: git config user.name "workflow@github"; git config user.email "workflow@github"
+   - name: setup git
+     run: git config user.name "workflow@github"; git config user.email "workflow@github"
       
-    - name: commit
-      run: git commit -a -m "set rebuild flag"
+   - name: commit
+     run: git commit -a -m "set rebuild flag"
       
-    - name: push
-      run: git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
+   - name: push
+     run: git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
