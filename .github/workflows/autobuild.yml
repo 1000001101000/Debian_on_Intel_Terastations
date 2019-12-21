@@ -14,7 +14,7 @@ jobs:
     
     ##check for build flag, 
     - name: check for the build needed flag
-      run: echo "::set-output name=commit_needed::$(curl -sL "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild" 2>/dev/null)"  
+      run: echo "::set-output name=build_needed::$(curl -sL "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild" 2>/dev/null)"  
       
     - name: update apt
       if: env.build_needed == 'yes'
