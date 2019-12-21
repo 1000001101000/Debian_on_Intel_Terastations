@@ -35,7 +35,7 @@ jobs:
     
     - name: build stretch installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Stretch/build/; sudo ./build.sh
+      run: cd installer-image/Stretch/build/; sudo ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
     
     - name: copy stretch image to repo
@@ -45,7 +45,7 @@ jobs:
       
     - name: build buster installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Buster/build/; sudo ./build.sh
+      run: cd installer-image/Buster/build/; sudo ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
     
     - name: clear rebuild needed flag 
