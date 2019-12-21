@@ -27,6 +27,20 @@ jobs:
     - name: check for libmicon.py update
       run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes"  
       
+    - name: check for micon_startup.py update
+      run: wget -O /tmp/micon_startup.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_startup.py" 2>/dev/null; cat /tmp/micon_startup.py | md5sum > /tmp/source 
+    - name: check for micon_startup.py update
+      run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/micon_startup.py  2>/dev/null | md5sum > /tmp/dest
+    - name: check for micon_startup.py update
+      run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes" 
+      
+    - name: check for micon_shutdown.py update
+      run: wget -O /tmp/micon_shutdown.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_shutdown.py" 2>/dev/null; cat /tmp/micon_shutdown.py | md5sum > /tmp/source 
+    - name: check for micon_shutdown.py update
+      run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/micon_shutdown.py  2>/dev/null | md5sum > /tmp/dest
+    - name: check for micon_shutdown.py update
+      run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes"
+      
       
     - name: if needed, clone the repo for update
       if: env.commit_needed == 'yes'
@@ -35,6 +49,16 @@ jobs:
     - name: if needed, copy file to repo
       if: env.commit_needed == 'yes'
       run: cp -v /tmp/libmicon.py micon_scripts/libmicon.py
+      working-directory: "${{env.repo_dir}}"
+      
+    - name: if needed, copy file to repo
+      if: env.commit_needed == 'yes'
+      run: cp -v /tmp/micon_startup.py micon_scripts/micon_startup.py
+      working-directory: "${{env.repo_dir}}"
+      
+    - name: if needed, copy file to repo
+      if: env.commit_needed == 'yes'
+      run: cp -v /tmp/micon_shutdown.py micon_scripts/micon_shutdown.py
       working-directory: "${{env.repo_dir}}"
       
     - name: if needed, copy file to repo
