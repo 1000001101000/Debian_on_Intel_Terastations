@@ -1,26 +1,49 @@
-name: Update base installer
+name: Generate new images if any components changed
 
-on:
-  schedule:
-    - cron: 32 20 * * *
+on: [push]
+  #schedule: 
+    #- cron: 32 20 * * *
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      repo_dir: .
+      build_needed: no
     steps: 
-    - uses: actions/checkout@v1
+    
+    ##check for build flag, 
+    - name: check for the build needed flag
+      run: curl -sL ""https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild" 2>/dev/null  
+      
     - name: update apt
+      if: env.build_needed == 'yes'
       run: sudo apt-get update || exit 0
+      
     - name: ensure build packages are installed
+      if: env.build_needed == 'yes'
       run: sudo apt-get install gzip rsync wget cpio grub2 xorriso mtools
+    
+    - name: if needed, clone the repo for build
+      if: env.build_needed == 'yes'
+      run: git clone https://github.com/${{github.repository}}; echo "::set-env name=repo_dir::$(ls -rt | tail -n 1)"
+    
     - name: set git user name
-      run: git config user.name "workflow@github" 
-    - name: set git user email
-      run: git config user.email "workflow@github" 
-    - name: check for updated debian installer
-      run: .github/scripts/update_check.sh
-      id: build_images
-    - name: commit new images
-      if: steps.build_images.outputs.commit_needed == 'yes'
-      run: git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
+      if: env.build_needed == 'yes'
+      run: git config user.name "workflow@github"; git config user.email "workflow@github"
+      working-directory: "${{env.repo_dir}}"
+    
+    - name: build stretch installer
+      if: env.build_needed == 'yes'
+      run: cd installer-image/Stretch/build/; sudo ./build.sh
+      working-directory: "${{env.repo_dir}}"
+  
+    - name: build buster installer
+      if: env.build_needed == 'yes'
+      run: cd installer-image/Buster/build/; sudo ./build.sh
+      working-directory: "${{env.repo_dir}}"
+  
+  #  - name: commit new images
+  #    if: steps.build_images.outputs.commit_needed == 'yes'
+  #    run: git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
       
