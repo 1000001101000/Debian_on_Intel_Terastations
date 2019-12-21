@@ -14,7 +14,7 @@ jobs:
     
     ##check for build flag, 
     - name: check for the build needed flag
-      run: curl -sL "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild" 2>/dev/null  
+      run: echo "::set-output name=commit_needed::$(curl -sL "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild" 2>/dev/null)"  
       
     - name: update apt
       if: env.build_needed == 'yes'
@@ -37,10 +37,25 @@ jobs:
       if: env.build_needed == 'yes'
       run: cd installer-image/Stretch/build/; sudo ./build.sh
       working-directory: "${{env.repo_dir}}"
-  
+    
+    - name: copy stretch image to repo
+      if: env.build_needed == 'yes'
+      run: cp installer-image/Stretch/build/output/*.iso installer-image/Stretch/
+      working-directory: "${{env.repo_dir}}"
+      
     - name: build buster installer
       if: env.build_needed == 'yes'
       run: cd installer-image/Buster/build/; sudo ./build.sh
+      working-directory: "${{env.repo_dir}}"
+    
+    - name: clear rebuild needed flag 
+      if: env.build_needed == 'no'
+      run: echo yes > .rebuild
+      working-directory: "${{env.repo_dir}}"
+      
+    - name: if needed, commit
+      if: env.build_needed == 'yes'
+      run: git commit -a -m "update files from external projects"
       working-directory: "${{env.repo_dir}}"
   
   #  - name: commit new images
