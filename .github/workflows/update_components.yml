@@ -21,7 +21,7 @@ jobs:
       run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes"
       
     - name: check for libmicon.py update
-      run: wget -O /tmp/libmicon.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/libmicon.py" 2>/dev/null; cat /tmp/micro-evtd-amd64 | md5sum > /tmp/source 
+      run: wget -O /tmp/libmicon.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/libmicon.py" 2>/dev/null; cat /tmp/libmicon.py | md5sum > /tmp/source 
     - name: check for libmicon.py update
       run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/libmicon.py  2>/dev/null | md5sum > /tmp/dest
     - name: check for libmicon.py update
