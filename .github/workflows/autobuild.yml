@@ -47,15 +47,20 @@ jobs:
       if: env.build_needed == 'yes'
       run: cd installer-image/Buster/build/; sudo ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
+      
+    - name: copy buster image to repo
+      if: env.build_needed == 'yes'
+      run: cp installer-image/Buster/build/output/*.iso installer-image/Buster/
+      working-directory: "${{env.repo_dir}}"  
     
     - name: clear rebuild needed flag 
-      if: env.build_needed == 'no'
-      run: echo yes > .rebuild
+      if: env.build_needed == 'yes'
+      run: echo no > .rebuild
       working-directory: "${{env.repo_dir}}"
       
     - name: if needed, commit
       if: env.build_needed == 'yes'
-      run: git commit -a -m "update files from external projects"
+      run: git commit; git commit -a -m "update files from external projects"
       working-directory: "${{env.repo_dir}}"
   
   #  - name: commit new images
