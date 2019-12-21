@@ -34,7 +34,7 @@ jobs:
     
     - name: if needed, copy file to repo
       if: env.commit_needed == 'yes'
-      run: cp -v /tmp/libmicon.py libmicon.py
+      run: cp -v /tmp/libmicon.py micon_scripts/libmicon.py
       working-directory: "${{env.repo_dir}}"
       
     - name: if needed, copy file to repo
