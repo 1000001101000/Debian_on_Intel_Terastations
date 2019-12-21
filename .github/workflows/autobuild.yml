@@ -43,6 +43,11 @@ jobs:
       run: cp installer-image/Stretch/build/output/*.iso installer-image/Stretch/
       working-directory: "${{env.repo_dir}}"
       
+    - name: update stretch base installer hash
+      if: env.build_needed == 'yes'
+      run: cat installer-image/Stretch/build/debian-files/mini.iso | md5sum > installer-image/Stretch/build/last_build.txt
+      working-directory: "${{env.repo_dir}}"
+      
     - name: build buster installer
       if: env.build_needed == 'yes'
       run: cd installer-image/Buster/build/; sudo ./generate_images.sh
@@ -51,7 +56,12 @@ jobs:
     - name: copy buster image to repo
       if: env.build_needed == 'yes'
       run: cp installer-image/Buster/build/output/*.iso installer-image/Buster/
-      working-directory: "${{env.repo_dir}}"  
+      working-directory: "${{env.repo_dir}}"
+      
+    - name: update buster base installer hash
+      if: env.build_needed == 'yes'
+      run: cat installer-image/Buster/build/debian-files/mini.iso | md5sum > installer-image/Buster/build/last_build.txt
+      working-directory: "${{env.repo_dir}}"
     
     - name: clear rebuild needed flag 
       if: env.build_needed == 'yes'
