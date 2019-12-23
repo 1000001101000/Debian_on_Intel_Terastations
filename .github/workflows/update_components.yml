@@ -10,10 +10,15 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    container: 'debian:9'
     env:
       commit_needed: no
       repo_dir: .
     steps: 
+    - name: update apt
+      run: apt-get update
+    - name: install needed tools
+      run: apt-get -y install wget git curl
     - name: check for micro-etvd update
       run: wget -O /tmp/micro-evtd-amd64 "https://github.com/1000001101000/micro-evtd/raw/master/bins/micro-evtd-amd64" 2>/dev/null; cat /tmp/micro-evtd-amd64 | md5sum > /tmp/source 
     - name: check for micro-etvd update
