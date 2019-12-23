@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: 'debian:9'
     env:
       repo_dir: .
       build_needed: no
@@ -18,11 +19,11 @@ jobs:
       
     - name: update apt
       if: env.build_needed == 'yes'
-      run: sudo apt-get update || exit 0
+      run: apt-get update
       
     - name: ensure build packages are installed
       if: env.build_needed == 'yes'
-      run: sudo apt-get install gzip rsync wget cpio grub2 xorriso mtools
+      run: apt-get install gzip rsync wget cpio grub2 xorriso mtools git 
     
     - name: if needed, clone the repo for build
       if: env.build_needed == 'yes'
