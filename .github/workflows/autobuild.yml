@@ -1,8 +1,8 @@
 name: Generate new images if needed
 
-on:
-  schedule: 
-    - cron: 45 * * * *
+on: [push]
+ # schedule: 
+  #  - cron: 45 * * * *
 
 jobs:
   build:
@@ -16,6 +16,9 @@ jobs:
     ##check for build flag, 
     - name: check for the build needed flag
       run: echo "::set-env name=build_needed::$(curl -sL "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild" 2>/dev/null)"  
+      
+    - name: debug
+      run: echo ${{env.build_needed}}
       
     - name: update apt
       if: env.build_needed == 'yes'
