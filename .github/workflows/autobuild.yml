@@ -13,7 +13,6 @@ jobs:
       build_needed: no
     steps: 
     - name: update apt
-      if: env.build_needed == 'yes'
       run: apt-get update
     
     - name: install curl
