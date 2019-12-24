@@ -12,18 +12,17 @@ jobs:
       repo_dir: .
       build_needed: no
     steps: 
-    
-    ##check for build flag, 
-    - name: check for the build needed flag
-      run: curl -sL https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild  
-      #echo "::set-env name=build_needed::
-       
-    - name: debug
-      run: echo ${{env.build_needed}}
-      
     - name: update apt
       if: env.build_needed == 'yes'
       run: apt-get update
+    
+    - name: install curl
+      run: apt-get -y install curl
+    
+    ##check for build flag, 
+    - name: check for the build needed flag
+      run: echo "::set-env name=build_needed::$(curl -sL https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild 2>/dev/null)"  
+      #echo "::set-env name=build_needed::
       
     - name: ensure build packages are installed
       if: env.build_needed == 'yes'
