@@ -27,7 +27,7 @@ jobs:
       
     - name: ensure build packages are installed
       if: env.build_needed == 'yes'
-      run: echo yes | apt-get -y install gzip rsync wget cpio grub2 xorriso mtools git 
+      run: apt-get -y install gzip rsync wget cpio grub2 xorriso mtools git 
     
     - name: if needed, clone the repo for build
       if: env.build_needed == 'yes'
@@ -40,7 +40,7 @@ jobs:
     
     - name: build stretch installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Stretch/build/; sudo ./generate_images.sh
+      run: cd installer-image/Stretch/build/; ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
     
     - name: copy stretch image to repo
@@ -55,7 +55,7 @@ jobs:
       
     - name: build buster installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Buster/build/; sudo ./generate_images.sh
+      run: cd installer-image/Buster/build/; ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
       
     - name: copy buster image to repo
