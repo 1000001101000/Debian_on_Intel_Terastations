@@ -1,8 +1,8 @@
 name: Generate new images if needed
 
-on: [push]
- # schedule: 
-  #  - cron: 45 * * * *
+on: #[push]
+  schedule: 
+    - cron: 45 * * * *
 
 jobs:
   build:
