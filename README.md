@@ -37,7 +37,7 @@ To set it up manually:
 * add the module to /etc/modules "echo it87 >> /etc/modules"
 * run "pwmconfig" and follow the prompts to set up a fancontrol config.
 * run "sensors" to monitor you temperature and fan speeds
-  note: the voltage sensors will return strange data which is probably best ignored. 
+   
 
 ## Buttons (button_example.sh, it87-gpio.patch, build-modules.sh)
 These devices use some spare pins from the IT8721f chip to control the "display" and "function" buttons on the front. The GPIO function of the IT8721 isn't normally supported by the gpio-it87 module so it is necessary to apply a patch to enable it.  I've included the necessary patch and added logic to build-modules.sh to automatically apply it. I've also included a script that demonstrates how to read the GPIO values to determine when one of the buttons is pressed.
