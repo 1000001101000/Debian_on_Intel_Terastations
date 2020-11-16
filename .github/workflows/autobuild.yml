@@ -20,7 +20,7 @@ jobs:
     
     ##check for build flag, 
     - name: check for the build needed flag
-      run: echo "::set-env name=build_needed::$(curl -sL https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild 2>/dev/null)"  
+      run: echo "build_needed=$(curl -sL https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild 2>/dev/null)" >> $GITHUB_ENV 
     
     - name: configure silent grub install
       run: echo "grub-pc grub-pc/install_devices_empty   boolean true" | debconf-set-selections
