@@ -24,46 +24,46 @@ jobs:
     - name: check for micro-etvd update
       run: curl -sL https://github.com/${{github.repository}}/raw/master/micro-evtd 2>/dev/null | md5sum > /tmp/dest
     - name: check for micro-etvd update
-      run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes"
+      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
     - name: check for libmicon.py update
       run: wget -O /tmp/libmicon.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/libmicon.py" 2>/dev/null; cat /tmp/libmicon.py | md5sum > /tmp/source 
     - name: check for libmicon.py update
       run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/libmicon.py  2>/dev/null | md5sum > /tmp/dest
     - name: check for libmicon.py update
-      run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes"  
+      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV  
       
     - name: check for micon_startup.py update
       run: wget -O /tmp/micon_startup.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_startup.py" 2>/dev/null; cat /tmp/micon_startup.py | md5sum > /tmp/source 
     - name: check for micon_startup.py update
       run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/micon_startup.py  2>/dev/null | md5sum > /tmp/dest
     - name: check for micon_startup.py update
-      run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes" 
+      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV  
       
     - name: check for micon_shutdown.py update
       run: wget -O /tmp/micon_shutdown.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_shutdown.py" 2>/dev/null; cat /tmp/micon_shutdown.py | md5sum > /tmp/source 
     - name: check for micon_shutdown.py update
       run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/micon_shutdown.py  2>/dev/null | md5sum > /tmp/dest
     - name: check for micon_shutdown.py update
-      run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes"
+      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
     - name: check for updated stretch installer
       run: curl -sL "http://ftp.nl.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/mini.iso" 2>/dev/null | md5sum > /tmp/source
     - name: check for updated stretch installer
       run: wget -O /tmp/dest "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/installer-image/Stretch/build/last_build.txt"  
     - name: check for updated stretch installer
-      run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes" 
+      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
     - name: check for updated buster installer
       run: curl -sL "http://ftp.nl.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/mini.iso" 2>/dev/null | md5sum > /tmp/source
     - name: check for updated buster installer
       run: wget -O /tmp/dest "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/installer-image/Buster/build/last_build.txt"  
     - name: check for updated buster installer
-      run: diff /tmp/source /tmp/dest || echo "::set-env name=commit_needed::yes" 
+      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
     - name: if needed, clone the repo for update
       if: env.commit_needed == 'yes'
-      run: git clone https://github.com/${{github.repository}}; echo "::set-env name=repo_dir::$(ls -rt | tail -n 1)"
+      run: git clone https://github.com/${{github.repository}}; echo "repo_dir=$(ls -rt | tail -n 1)" >> $GITHUB_ENV
     
     - name: if needed, copy file to repo
       if: env.commit_needed == 'yes'
