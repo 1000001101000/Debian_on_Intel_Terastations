@@ -1,0 +1,13 @@
+gpio-ich:
+copied out of the mainline kernel source so that it can be added to debian's kernel which currently doesn't include it
+
+gpio-it87:
+copied out of the mainline kernel source and tweaked to include IT8721 support
+
+pinctrl-dnv:
+pulled out of the kernel source for the ReadyNAS 428 which has a similar SoC since I can't seem to get the mainline driver to work(yet).
+see: https://kb.netgear.com/2649/NETGEAR-Open-Source-Code-for-Programmers-GPL
+
+it87ts:
+forked from another project and tweaked to support it8721 with extra fans.
+see: https://github.com/andreychernyshev/it87-8613E
