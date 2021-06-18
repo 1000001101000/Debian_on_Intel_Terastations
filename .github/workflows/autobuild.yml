@@ -2,7 +2,7 @@ name: Generate new images if needed
 
 on: #[push]
   schedule: 
-    - cron: 10 * * * *
+    - cron: */20 * * * *
 
 jobs:
   build:
