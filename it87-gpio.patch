@@ -1,8 +1,0 @@
---- linux-source-4.19/drivers/gpio/gpio-it87.c	2019-04-27 02:36:41.000000000 -0500
-+++ linux-source-4.19-mod/drivers/gpio/gpio-it87.c	2019-06-28 16:13:41.266651922 -0500
-@@ -42 +42 @@
--#define IT8728_ID	0x8728
-+#define IT8721_ID	0x8721
-@@ -329 +329 @@
--	case IT8728_ID:
-+	case IT8721_ID:

@@ -3,6 +3,7 @@
 distro="buster"
 
 mkdir debian-files output
+rm -r payload/
 mkdir -p payload/source
 
 cd debian-files
@@ -13,13 +14,13 @@ fi
 wget -N "http://ftp.nl.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/mini.iso"
 cd ..
 
+cp preseed.cfg payload/
 cp ../../../*.sh payload/source/
 cp ../../../*.service payload/source/
-cp ../../../*.patch payload/source/
 cp ../../../it8721.conf payload/source/
-cp ../../../module_exclude.txt payload/source/
 cp -r ../../../micon_scripts payload/source/
 cp ../../../micro-evtd payload/source/
+cp -r ../../../Tools/modules payload/source/
 
 xorriso -osirrox on -indev debian-files/mini.iso -extract / iso/
 cp iso/initrd.gz .
