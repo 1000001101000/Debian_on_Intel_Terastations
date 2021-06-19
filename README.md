@@ -1,9 +1,16 @@
 ![alt text](https://static.miraheze.org/buffalonaswiki/thumb/5/5f/Tsx86_lcd1.jpg/800px-Tsx86_lcd1.jpg)
 
 # Debian_on_Intel_Terastations
-Tools for running Debian effectively on Intel-based Buffalo Terastations (TS/WS-WVHL/QVHL/6VHL/8VHL/RVHL, TS4000,TS5000)
+Tools for running Debian effectively on Intel-based Buffalo Terastations
 
 If this project helps you click the Star at the top of the page to let me know!
+
+The installer has been tested directly on:
+* V-Series (TS-WVL/TS-QVL/TS-RVL/TS-6VL/TS-8VL) 
+* TS5000 (TS5200DN/TS5400DN/TS5600DN/TS5800DN/TS5400RN)
+* WS5020 (WS5220/WS5420)
+
+I've looked at the firmware and GPL source code for the TS4000, WSH5010, TS6000, TS7000/TS-2RZ and WSH and confirmed they should work as well. Please contact me if you get a chance to give them a try. 
 
 Buffalo's Intel-based Terastations are very similar to a fairly typical PC with their built in USB and VGA ports. This allows you to Install any operating system you want on them though without some of the features provided by Buffalo's firmware. The goal of this project is to provide tools which can be used to handle some of the features not automatically dealt with by a normal Debian install.
 
