@@ -668,7 +668,7 @@ static irqreturn_t dnv_gpio_irq_handler(int irq, void *dev_id)
 	for (gpi = 0; gpi < vg->chip_info->npads; gpi++)
 		if (vg->chip_priv[gpi].irq_type != IRQ_TYPE_NONE &&
 				dnv_gpio_irq_chk(&vg->chip, gpi)) {
-			#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 5, 0)
+			#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0)
 			unsigned int virq =
 				irq_find_mapping(vg->chip.irq.domain, gpi);
 			#else
