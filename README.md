@@ -48,12 +48,11 @@ To set it up manually:
 * run "sensors" to monitor you temperature and fan speeds
    
 
-## Buttons (button_example.sh, it87-gpio.patch, build-modules.sh)
-These devices use some spare pins from the IT8721f chip to control the "display" and "function" buttons on the front. The GPIO function of the IT8721 isn't normally supported by the gpio-it87 module so it is necessary to apply a patch to enable it.  I've included the necessary patch and added logic to build-modules.sh to automatically apply it. I've also included a script that demonstrates how to read the GPIO values to determine when one of the buttons is pressed.
+## Buttons (button_example.sh)
+Some of these devices use some spare pins from the IT8721 chip to control the "display" and "function" buttons on the front. The GPIO function of the IT8721 isn't normally supported by the gpio-it87 module so i've included a version which enables it. I've also included a script that demonstrates how to read the GPIO values to determine when one of the buttons is pressed though it's pretty ugly and in need of a re-write. 
 
 To use it:
 * Copy button_example.sh to /usr/local/bin/ (the installer image will do that automatically if you use it)
-* Run build-module.sh (this happens at startup if you use the installer or set it up in the hotswap section)
 * Run button_example.sh, the script will output the GPIO values each time you press/release one of the buttons.
 
 ## LCD Screen/LEDs/Buzzer
@@ -63,7 +62,7 @@ For the python library used to communicate with this chip and some example scrip
 
 https://github.com/1000001101000/Python_buffalo_libmicon/blob/master/README.md
 
-For the installer I've added lcd_init.service which initializes the LCD display and power LED at startup.
+For the installer I've added micon_boot.service which initializes the LCD display and power LED at startup.
 
 
 ### Headless installer (/installer-image/)
