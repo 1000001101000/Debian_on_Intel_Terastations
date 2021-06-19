@@ -19,7 +19,7 @@ The specific issues I'm currently addressing are:
 ### Hotswap bays (hotswap_enable.sh, hotswap.service, build-modules.sh and drive_detect_example.sh)
 When these devices startup they scan each drive bay to determine which have drives and enable power for just those bays. Normally the ability to add drives to an empty bay is handled by Buffalo's software. To replicate this behaviour under Debian it is necessary to add a kernel module which allows us to access the GPIO pins used to detect drives and enable power to the bays.
 
-* build-modules.sh - A script which automatically builds and installs the missing GPIO driver needed to enable/disable drive bays and detect drive insert/removal. This is from my other project (https://github.com/1000001101000/Debian_Module_Builder)
+* Source code and dkms configuration for the Intel ICH and Denverton GPIO modules.
 * hotswap_enable.sh - A script which calls build-modules.sh to ensure the GPIO driver is loaded then makes sure all the device's drive bays are enabled. This also serves as an example of how to enable/disable bays from userspace.
 * hotswap.service - A systemd service which runs hotswap_enable.sh at startup.
 * drive_detect_example.sh - A script demonstrating how to detect drives being inserted or removed using the GPIO interface. This could be used to detect when a drive is inserted and then power up the corresponding bay rather than the simple enable script I'm using. 
@@ -38,7 +38,7 @@ To install manually:
 * Create a symlink of update_boot.sh in /etc/initramfs/post-update.d/
 
 ## Fans
-The fan speeds can be monitored/controlled via the IT8721f chip. Fortunately, the necessary driver is included with the kernel. The fan speed can be adjusted automatically using fancontrol and monitored using lmsensors.
+The fan speeds can be monitored/controlled via the IT87 chip. I've made some tweaks to an existing out-of-tree IT87 driver to support all the available fan configurations.
 
 To set it up manually:
 * install lm-sensors and fancontrol "apt-get install lm-sensors fancontrol"
