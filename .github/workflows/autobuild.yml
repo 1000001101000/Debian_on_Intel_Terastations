@@ -67,6 +67,21 @@ jobs:
       if: env.build_needed == 'yes'
       run: cat installer-image/Buster/build/debian-files/mini.iso | md5sum > installer-image/Buster/build/last_build.txt
       working-directory: "${{env.repo_dir}}"
+      
+    - name: build Bullseye installer
+      if: env.build_needed == 'yes'
+      run: cd installer-image/Bullseye/build/; ./generate_images.sh
+      working-directory: "${{env.repo_dir}}"
+      
+    - name: copy buster image to repo
+      if: env.build_needed == 'yes'
+      run: cp installer-image/Bullseye/build/output/*.iso installer-image/Bullseye/
+      working-directory: "${{env.repo_dir}}"
+      
+    - name: update bullseye base installer hash
+      if: env.build_needed == 'yes'
+      run: cat installer-image/Bullseye/build/debian-files/mini.iso | md5sum > installer-image/Bullseye/build/last_build.txt
+      working-directory: "${{env.repo_dir}}"
     
     - name: clear rebuild needed flag 
       if: env.build_needed == 'yes'
