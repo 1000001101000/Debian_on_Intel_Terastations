@@ -54,6 +54,13 @@ jobs:
     - name: check for updated stretch installer
       run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
+    - name: check for updated Bullseye installer
+      run: curl -sL "http://ftp.nl.debian.org/debian/dists/bullseye/main/installer-amd64/current/images/netboot/mini.iso" 2>/dev/null | md5sum > /tmp/source
+    - name: check for updated Bullseye installer
+      run: wget -O /tmp/dest "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/installer-image/Bullseye/build/last_build.txt"  
+    - name: check for updated Bullseye installer
+      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
+      
     - name: check for updated buster installer
       run: curl -sL "http://ftp.nl.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/mini.iso" 2>/dev/null | md5sum > /tmp/source
     - name: check for updated buster installer
