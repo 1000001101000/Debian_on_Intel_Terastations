@@ -1,9 +1,13 @@
 name: Generate new images if needed
 
-on: #[push]
-  schedule: 
-    - cron: "*/20 * * * *"
-
+#on: #[push]
+#  schedule: 
+#    - cron: "*/20 * * * *"
+on:
+  push:
+    paths: 
+      - '.rebuild'
+      
 jobs:
   build:
     runs-on: ubuntu-latest
