@@ -7,6 +7,8 @@ on:
   push:
     paths: 
       - '.rebuild'
+  schedule: 
+      - cron: "*/20 * * * *"
       
 jobs:
   build:
