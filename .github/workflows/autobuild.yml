@@ -79,7 +79,7 @@ jobs:
       run: cd installer-image/Bullseye/build/; ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
       
-    - name: copy buster image to repo
+    - name: copy Bullseye image to repo
       if: env.build_needed == 'yes'
       run: cp installer-image/Bullseye/build/output/*.iso installer-image/Bullseye/
       working-directory: "${{env.repo_dir}}"
