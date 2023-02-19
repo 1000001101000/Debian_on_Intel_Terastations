@@ -13,7 +13,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: 'debian:10'
+    container: 'debian:11'
     env:
       repo_dir: .
       build_needed: no
@@ -30,7 +30,7 @@ jobs:
     
     - name: ensure build packages are installed
       if: env.build_needed == 'yes'
-      run: apt-get -y install gzip rsync wget cpio mtools git syslinux xz-utils
+      run: apt-get -y install sudo gzip rsync wget cpio mtools git syslinux xz-utils
     
     - name: if needed, clone the repo for build
       if: env.build_needed == 'yes'
