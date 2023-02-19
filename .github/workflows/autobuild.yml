@@ -43,7 +43,7 @@ jobs:
     
     - name: build bookworm installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Bookworm/build/; ./generate_images.sh
+      run: cd installer-image/Bookworm/build/; sudo ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
     
     - name: copy bookworm image to repo
@@ -58,7 +58,7 @@ jobs:
       
     - name: build buster installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Buster/build/; ./generate_images.sh
+      run: cd installer-image/Buster/build/; sudo ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
       
     - name: copy buster image to repo
@@ -73,7 +73,7 @@ jobs:
       
     - name: build Bullseye installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Bullseye/build/; ./generate_images.sh
+      run: cd installer-image/Bullseye/build/; sudo ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
       
     - name: copy Bullseye image to repo
