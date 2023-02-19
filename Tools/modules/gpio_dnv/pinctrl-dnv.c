@@ -290,19 +290,6 @@ static struct chip_info {
 		.reg_bit_shift	= reg_bit_shift_dnv,
 		.dbg_show	= dbg_show_dnv,
 	},
-#if 0
-	{
-		.name		= "Apollo Lake",
-		.gpio_label	= "gpio_apl",
-		.padbar		= 0x500,
-		.ngpios		= 74,
-		.npads		= 74,
-		.reg_map_base = {0x60, 0x130, 0x120, 0x80, 0x20, 0x500, 0x504},
-		.reg_map_offset	= reg_map_offset_apl,
-		.reg_bit_shift	= reg_bit_shift_apl,
-		.dbg_show	= dbg_show_apl,
-	},
-#endif
 	{}
 };
 
@@ -528,6 +515,7 @@ static int dnv_irq_set_type(struct irq_data *d, unsigned int type)
 		case IRQ_TYPE_LEVEL_LOW:
 			pad_cfg_dw0 |= DNV_RXEVCFG_TRIG_LVL;
 			pad_cfg_dw0 |= DNV_RXINV;
+			break;
 		default:
 			err = -EINVAL;
 			goto exit;
@@ -768,9 +756,12 @@ static int dnv_gpio_probe(struct platform_device *pdev)
 	void __iomem	*reg_base;
 	int i, ret;
 	unsigned int padbar;
+	#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)
+	struct gpio_irq_chip *girq;
+	#endif
 
 	//if (acpi_bus_get_device(handle, &acpi_dev))
-		//return -ENODEV;
+	//	return -ENODEV;
 
 	mem_rc = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	reg_base = devm_ioremap_resource(dev, mem_rc);
@@ -849,8 +840,22 @@ static int dnv_gpio_probe(struct platform_device *pdev)
 	irq_rc = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
 	if (irq_rc && irq_rc->start) {
 		dnv_gpio_irq_init_hw(vg);
+
+		#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)
+		girq = &gc->irq;
+		girq->chip = &dnv_irqchip;
+		/* The event comes from the outside so no parent handler */
+		girq->parent_handler = NULL;
+		girq->num_parents = 0;
+		girq->parents = NULL;
+		girq->default_type = IRQ_TYPE_NONE;
+		girq->handler = handle_simple_irq;
+
+		gpio_irq_chip_set_chip(girq, &dnv_irqchip);
+		#else
 		ret = gpiochip_irqchip_add(gc, &dnv_irqchip, 0,
 					   handle_simple_irq, IRQ_TYPE_NONE);
+		#endif
 		if (ret) {
 			dev_err(dev, "failed to add irqchip\n");
 			gpiochip_remove(gc);
@@ -971,14 +976,15 @@ static const struct dev_pm_ops dnv_gpio_pm_ops = {
 	SET_RUNTIME_PM_OPS(dnv_gpio_runtime_suspend, dnv_gpio_runtime_resume,
 			   NULL)
 };
-#if 0
+
 static const struct acpi_device_id dnv_gpio_acpi_match[] = {
-	{ "INT33B2", 0 },
-	{ "INT33FC", 0 },
+	//{ "INT33B2", 0 },
+	//{ "INT33FC", 0 },
+	{ "INTC3000", 0},
 	{ }
 };
 MODULE_DEVICE_TABLE(acpi, dnv_gpio_acpi_match);
-#endif
+
 static int dnv_gpio_remove(struct platform_device *pdev)
 {
 	struct dnv_gpio *vg = platform_get_drvdata(pdev);
@@ -996,7 +1002,7 @@ static struct platform_driver dnv_gpio_driver = {
 		.name   = "gpio_dnv",
 		.pm	= &dnv_gpio_pm_ops,
 		.owner	= THIS_MODULE,
-		//.acpi_match_table = ACPI_PTR(dnv_gpio_acpi_match),
+		.acpi_match_table = dnv_gpio_acpi_match,
 	},
 };
 

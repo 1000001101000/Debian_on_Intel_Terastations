@@ -13,7 +13,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: 'debian:9'
+    container: 'debian:10'
     env:
       repo_dir: .
       build_needed: no
@@ -28,12 +28,9 @@ jobs:
     - name: check for the build needed flag
       run: echo "build_needed=$(curl -sL https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild 2>/dev/null)" >> $GITHUB_ENV 
     
-    - name: configure silent grub install
-      run: echo "grub-pc grub-pc/install_devices_empty   boolean true" | debconf-set-selections
-      
     - name: ensure build packages are installed
       if: env.build_needed == 'yes'
-      run: apt-get -y install gzip rsync wget cpio grub2 xorriso mtools git 
+      run: apt-get -y install gzip rsync wget cpio mtools git syslinux xz-utils
     
     - name: if needed, clone the repo for build
       if: env.build_needed == 'yes'
@@ -44,19 +41,19 @@ jobs:
       run: git config user.name "workflow@github"; git config user.email "workflow@github"
       working-directory: "${{env.repo_dir}}"
     
-    - name: build stretch installer
+    - name: build bookworm installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Stretch/build/; ./generate_images.sh
+      run: cd installer-image/Bookworm/build/; ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
     
-    - name: copy stretch image to repo
+    - name: copy bookworm image to repo
       if: env.build_needed == 'yes'
-      run: cp installer-image/Stretch/build/output/*.iso installer-image/Stretch/
+      run: cp installer-image/Bookworm/build/output/*.img installer-image/Bookworm/
       working-directory: "${{env.repo_dir}}"
       
-    - name: update stretch base installer hash
+    - name: update bookworm base installer hash
       if: env.build_needed == 'yes'
-      run: cat installer-image/Stretch/build/debian-files/mini.iso | md5sum > installer-image/Stretch/build/last_build.txt
+      run: cat installer-image/Bookworm/build/debian-files/initrd.gz | md5sum > installer-image/Bookworm/build/last_build.txt
       working-directory: "${{env.repo_dir}}"
       
     - name: build buster installer
@@ -66,12 +63,12 @@ jobs:
       
     - name: copy buster image to repo
       if: env.build_needed == 'yes'
-      run: cp installer-image/Buster/build/output/*.iso installer-image/Buster/
+      run: cp installer-image/Buster/build/output/*.img installer-image/Buster/
       working-directory: "${{env.repo_dir}}"
       
     - name: update buster base installer hash
       if: env.build_needed == 'yes'
-      run: cat installer-image/Buster/build/debian-files/mini.iso | md5sum > installer-image/Buster/build/last_build.txt
+      run: cat installer-image/Buster/build/debian-files/initrd.gz | md5sum > installer-image/Buster/build/last_build.txt
       working-directory: "${{env.repo_dir}}"
       
     - name: build Bullseye installer
@@ -81,12 +78,12 @@ jobs:
       
     - name: copy Bullseye image to repo
       if: env.build_needed == 'yes'
-      run: cp installer-image/Bullseye/build/output/*.iso installer-image/Bullseye/
+      run: cp installer-image/Bullseye/build/output/*.img installer-image/Bullseye/
       working-directory: "${{env.repo_dir}}"
       
     - name: update bullseye base installer hash
       if: env.build_needed == 'yes'
-      run: cat installer-image/Bullseye/build/debian-files/mini.iso | md5sum > installer-image/Bullseye/build/last_build.txt
+      run: cat installer-image/Bullseye/build/debian-files/initrd.gz | md5sum > installer-image/Bullseye/build/last_build.txt
       working-directory: "${{env.repo_dir}}"
     
     - name: clear rebuild needed flag 
@@ -96,7 +93,7 @@ jobs:
       
     - name: if needed, commit
       if: env.build_needed == 'yes'
-      run: git commit -v -a -m "update files from external projects"
+      run: git commit -v -a -m "update installer images"
       working-directory: "${{env.repo_dir}}"
   
     - name: commit new images

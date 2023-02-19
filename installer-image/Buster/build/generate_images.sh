@@ -1,4 +1,4 @@
-##requires gzip, rsync, wget, cpio, grub2, xorriso
+##requires gzip, wget, cpio, syslinux, xorriso
 
 distro="buster"
 
@@ -11,7 +11,8 @@ if [ -d "tmp" ]; then
    rm -r "tmp/"
 fi
 
-wget -N "http://ftp.nl.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/mini.iso"
+wget -N "https://deb.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz"
+wget -N "https://deb.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux"
 cd ..
 
 cp preseed.cfg payload/
@@ -22,14 +23,11 @@ cp -r ../../../micon_scripts payload/source/
 cp ../../../micro-evtd payload/source/
 cp -r ../../../Tools/modules payload/source/
 
-xorriso -osirrox on -indev debian-files/mini.iso -extract / iso/
-cp iso/initrd.gz .
+cp debian-files/initrd.gz .
 if [ $? -ne 0 ]; then
         echo "failed to retrieve initrd.gz, quitting"
         exit
 fi
-
-kernel_ver="$(zcat initrd.gz | cpio -t | grep -m 1 lib/modules/ | gawk -F/ '{print $3}')"
 
 gunzip initrd.gz
 if [ $? -ne 0 ]; then
@@ -43,19 +41,38 @@ if [ $? -ne 0 ]; then
         exit
 fi
 cd ..
-gzip initrd
-#cat initrd | xz --check=crc32 -9 > initrd.xz
+#gzip initrd
+cat initrd | xz --check=crc32 -9e > initrd.xz
 if [ $? -ne 0 ]; then
         echo "failed to pack initrd, quitting"
         exit
 fi
 
-cp initrd.gz iso/
-cp grub.cfg iso/boot/grub/
-
-##
 rm output/*
-grub-mkrescue -o "output/ts-$distro-installer.iso" iso/
+mkdir img
+extlinuximg="output/ts-$distro-installer.img"
 
-rm -r iso/
-rm initrd.gz
+dd if=/dev/zero of="$extlinuximg" bs=1M count=45
+mkfs.vfat "$extlinuximg"
+mount -o loop "$extlinuximg" ./img/
+syslinuxdir="/usr/lib/syslinux/modules/bios"
+for x in "initrd.xz" "debian-files/linux" "$syslinuxdir/vesamenu.c32" "$syslinuxdir/libcom32.c32" "$syslinuxdir/libutil.c32"
+do
+  cp "$x" ./img/
+done
+
+cfg="./img/syslinux.cfg"
+echo "ui vesamenu.c32" 				> "$cfg"
+echo "TIMEOUT 20"				>> "$cfg"
+echo "label debian-installer"			>> "$cfg"
+echo "      menu label Debian $distro Installer">> "$cfg"
+echo "      menu default"			>> "$cfg"
+echo "      kernel /linux"			>> "$cfg"
+echo "      initrd /initrd.xz"			>> "$cfg"
+echo "Modify message"				>> "$cfg"
+
+umount ./img/
+syslinux --install "$extlinuximg"
+
+rm -r img/
+rm initrd*

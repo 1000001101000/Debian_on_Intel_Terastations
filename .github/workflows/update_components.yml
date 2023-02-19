@@ -47,22 +47,22 @@ jobs:
     - name: check for micon_shutdown.py update
       run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
-    - name: check for updated stretch installer
-      run: curl -sL "http://ftp.nl.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/mini.iso" 2>/dev/null | md5sum > /tmp/source
-    - name: check for updated stretch installer
-      run: wget -O /tmp/dest "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/installer-image/Stretch/build/last_build.txt"  
-    - name: check for updated stretch installer
+    - name: check for updated bookworm installer
+      run: curl -sL "http://ftp.nl.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" 2>/dev/null | md5sum > /tmp/source
+    - name: check for updated bookworm installer
+      run: wget -O /tmp/dest "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/installer-image/Bookworm/build/last_build.txt"  
+    - name: check for updated bookworm installer
       run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
     - name: check for updated Bullseye installer
-      run: curl -sL "http://ftp.nl.debian.org/debian/dists/bullseye/main/installer-amd64/current/images/netboot/mini.iso" 2>/dev/null | md5sum > /tmp/source
+      run: curl -sL "http://ftp.nl.debian.org/debian/dists/bullseye/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" 2>/dev/null | md5sum > /tmp/source
     - name: check for updated Bullseye installer
       run: wget -O /tmp/dest "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/installer-image/Bullseye/build/last_build.txt"  
     - name: check for updated Bullseye installer
       run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
     - name: check for updated buster installer
-      run: curl -sL "http://ftp.nl.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/mini.iso" 2>/dev/null | md5sum > /tmp/source
+      run: curl -sL "http://ftp.nl.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" 2>/dev/null | md5sum > /tmp/source
     - name: check for updated buster installer
       run: wget -O /tmp/dest "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/installer-image/Buster/build/last_build.txt"  
     - name: check for updated buster installer
