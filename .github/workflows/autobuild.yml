@@ -31,7 +31,7 @@ jobs:
     
     - name: ensure build packages are installed
       if: env.build_needed == 'yes'
-      run: apt-get -y install sudo gzip rsync wget cpio mtools git syslinux xz-utils
+      run: apt-get -y install sudo gzip rsync wget cpio mtools git syslinux xz-utils dosfstools
     
     - name: if needed, clone the repo for build
       if: env.build_needed == 'yes'
