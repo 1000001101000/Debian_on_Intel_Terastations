@@ -5,14 +5,14 @@ distro="bookworm"
 mkdir debian-files output
 rm -r payload/
 mkdir -p payload/source
-
+whoami
 cd debian-files
 if [ -d "tmp" ]; then
    rm -r "tmp/"
 fi
 
-wget -N "https://deb.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz"
-wget -N "https://deb.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux"
+wget -N "https://deb.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" 2>/dev/null
+wget -N "https://deb.debian.org/debian/dists/$distro/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux" 2>/dev/null
 cd ..
 
 cp preseed.cfg payload/
@@ -73,6 +73,10 @@ echo "Modify message"				>> "$cfg"
 
 umount ./img/
 syslinux --install "$extlinuximg"
+if [ $? -ne 0 ]; then
+        echo "failed to install bootloader"
+        exit 99
+fi
 
 rm -r img/
 rm initrd*

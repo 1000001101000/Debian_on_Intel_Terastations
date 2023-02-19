@@ -14,6 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: 'debian:11'
+    options: --user root
     env:
       repo_dir: .
       build_needed: no
@@ -43,7 +44,7 @@ jobs:
     
     - name: build bookworm installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Bookworm/build/; sudo ./generate_images.sh
+      run: cd installer-image/Bookworm/build/; ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
     
     - name: copy bookworm image to repo
