@@ -5,8 +5,8 @@ name: Generate new images if needed
 #    - cron: "*/20 * * * *"
 on:
   push:
-    paths: 
-      - '.rebuild'
+#    paths: 
+#      - '.rebuild'
   schedule: 
       - cron: "*/20 * * * *"
       
@@ -30,7 +30,7 @@ jobs:
     
     - name: ensure build packages are installed
       if: env.build_needed == 'yes'
-      run: apt-get -y install gzip rsync wget cpio mtools git isolinux xz-utils xorriso
+      run: apt-get -y install gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
     
     - name: if needed, clone the repo for build
       if: env.build_needed == 'yes'
