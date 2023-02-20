@@ -30,7 +30,7 @@ jobs:
     
     - name: ensure build packages are installed
       if: env.build_needed == 'yes'
-      run: apt-get -y install sudo gzip rsync wget cpio mtools git syslinux xz-utils dosfstools
+      run: apt-get -y install gzip rsync wget cpio mtools git syslinux xz-utils xorriso
     
     - name: if needed, clone the repo for build
       if: env.build_needed == 'yes'
@@ -48,7 +48,7 @@ jobs:
     
     - name: copy bookworm image to repo
       if: env.build_needed == 'yes'
-      run: cp installer-image/Bookworm/build/output/*.img installer-image/Bookworm/
+      run: cp installer-image/Bookworm/build/output/*.iso installer-image/Bookworm/
       working-directory: "${{env.repo_dir}}"
       
     - name: update bookworm base installer hash
@@ -58,12 +58,12 @@ jobs:
       
     - name: build buster installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Buster/build/; sudo ./generate_images.sh
+      run: cd installer-image/Buster/build/; ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
       
     - name: copy buster image to repo
       if: env.build_needed == 'yes'
-      run: cp installer-image/Buster/build/output/*.img installer-image/Buster/
+      run: cp installer-image/Buster/build/output/*.iso installer-image/Buster/
       working-directory: "${{env.repo_dir}}"
       
     - name: update buster base installer hash
@@ -73,12 +73,12 @@ jobs:
       
     - name: build Bullseye installer
       if: env.build_needed == 'yes'
-      run: cd installer-image/Bullseye/build/; sudo ./generate_images.sh
+      run: cd installer-image/Bullseye/build/; ./generate_images.sh
       working-directory: "${{env.repo_dir}}"
       
     - name: copy Bullseye image to repo
       if: env.build_needed == 'yes'
-      run: cp installer-image/Bullseye/build/output/*.img installer-image/Bullseye/
+      run: cp installer-image/Bullseye/build/output/*.iso installer-image/Bullseye/
       working-directory: "${{env.repo_dir}}"
       
     - name: update bullseye base installer hash

@@ -50,18 +50,18 @@ fi
 
 rm output/*
 mkdir img
-extlinuximg="output/ts-$distro-installer.img"
+extlinuximg="output/ts-$distro-installer.iso"
 
-dd if=/dev/zero of="$extlinuximg" bs=1M count=45
-mkfs.vfat "$extlinuximg"
-mount -o loop "$extlinuximg" ./img/
+#dd if=/dev/zero of="$extlinuximg" bs=1M count=45
+#mkfs.vfat "$extlinuximg"
+#mount -o loop "$extlinuximg" ./img/
 syslinuxdir="/usr/lib/syslinux/modules/bios"
-for x in "initrd.xz" "debian-files/linux" "$syslinuxdir/vesamenu.c32" "$syslinuxdir/libcom32.c32" "$syslinuxdir/libutil.c32"
+for x in "/usr/lib/ISOLINUX/isolinux.bin" "initrd.xz" "debian-files/linux" "$syslinuxdir/vesamenu.c32" "$syslinuxdir/libcom32.c32" "$syslinuxdir/libutil.c32" "$syslinuxdir/ldlinux.c32"
 do
   cp "$x" ./img/
 done
 
-cfg="./img/syslinux.cfg"
+cfg="./img/isolinux.cfg"
 echo "ui vesamenu.c32" 				> "$cfg"
 echo "TIMEOUT 20"				>> "$cfg"
 echo "label debian-installer"			>> "$cfg"
@@ -71,12 +71,19 @@ echo "      kernel /linux"			>> "$cfg"
 echo "      initrd /initrd.xz"			>> "$cfg"
 echo "Modify message"				>> "$cfg"
 
-umount ./img/
-syslinux --install "$extlinuximg"
-if [ $? -ne 0 ]; then
-        echo "failed to install bootloader"
-        exit 99
-fi
+#umount ./img/
+#syslinux --install "$extlinuximg"
+#if [ $? -ne 0 ]; then
+#        echo "failed to install bootloader"
+#        exit 99
+#fi
+mkisofs -o "output/ts-$distro-installer.iso" \
+   -b isolinux.bin -c boot.cat \
+   -no-emul-boot -boot-load-size 4 -boot-info-table \
+   img
+
+isohybrid "output/ts-$distro-installer.iso"
+
 
 rm -r img/
 rm initrd*
