@@ -1,14 +1,11 @@
 name: Generate new images if needed
 
-#on: #[push]
-#  schedule: 
-#    - cron: "*/20 * * * *"
 on:
   push:
-#    paths: 
-#      - '.rebuild'
+    paths: 
+      - '.rebuild'
   schedule: 
-      - cron: "*/20 * * * *"
+      - cron: "*/15 * * * *"
       
 jobs:
   build:
