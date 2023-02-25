@@ -39,4 +39,7 @@ if [ $? -eq 0 ]; then
   exit 0
 fi
 
+modprobe ahci
+modprobe md_mod
+
 exit 0
