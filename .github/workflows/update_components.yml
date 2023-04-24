@@ -10,7 +10,7 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    container: 'debian:9'
+    container: 'debian:11'
     env:
       commit_needed: no
       repo_dir: .
