@@ -5,6 +5,8 @@ Tools for running Debian effectively on Intel-based Buffalo Terastations
 
 If this project helps you click the Star at the top of the page to let me know!
 
+In addition to the Issues and Discussions tabs on GitHub we now also have a Discord channel at https://discord.gg/E88dkcuyW4 or our IRC on Libera.Chat in the #miraheze-buffalonas channel
+
 The installer has been tested directly on:
 * V-Series (TS-WVL/TS-QVL/TS-RVL/TS-6VL/TS-8VL) 
 * TS5000 (TS5200DN/TS5400DN/TS5600DN/TS5800DN/TS5400RN)
