@@ -61,13 +61,6 @@ jobs:
     - name: check for updated Bullseye installer
       run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
-    - name: check for updated buster installer
-      run: curl -sL "http://ftp.nl.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" 2>/dev/null | md5sum > /tmp/source
-    - name: check for updated buster installer
-      run: wget -O /tmp/dest "https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/installer-image/Buster/build/last_build.txt"  
-    - name: check for updated buster installer
-      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
-      
     - name: if needed, clone the repo for update
       if: env.commit_needed == 'yes'
       run: git clone https://github.com/${{github.repository}}; echo "repo_dir=$(ls -rt | tail -n 1)" >> $GITHUB_ENV
