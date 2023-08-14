@@ -33,19 +33,19 @@ jobs:
     - name: check for libmicon.py update
       run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV  
       
-    - name: check for micon_startup.py update
-      run: wget -O /tmp/micon_startup.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_startup.py" 2>/dev/null; cat /tmp/micon_startup.py | md5sum > /tmp/source 
-    - name: check for micon_startup.py update
-      run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/micon_startup.py  2>/dev/null | md5sum > /tmp/dest
-    - name: check for micon_startup.py update
-      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV  
+   # - name: check for micon_startup.py update
+   #   run: wget -O /tmp/micon_startup.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_startup.py" 2>/dev/null; cat /tmp/micon_startup.py | md5sum > /tmp/source 
+   # - name: check for micon_startup.py update
+   #   run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/micon_startup.py  2>/dev/null | md5sum > /tmp/dest
+   # - name: check for micon_startup.py update
+   #   run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV  
       
-    - name: check for micon_shutdown.py update
-      run: wget -O /tmp/micon_shutdown.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_shutdown.py" 2>/dev/null; cat /tmp/micon_shutdown.py | md5sum > /tmp/source 
-    - name: check for micon_shutdown.py update
-      run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/micon_shutdown.py  2>/dev/null | md5sum > /tmp/dest
-    - name: check for micon_shutdown.py update
-      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
+   # - name: check for micon_shutdown.py update
+   #   run: wget -O /tmp/micon_shutdown.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_shutdown.py" 2>/dev/null; cat /tmp/micon_shutdown.py | md5sum > /tmp/source 
+   # - name: check for micon_shutdown.py update
+   #   run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/micon_shutdown.py  2>/dev/null | md5sum > /tmp/dest
+   # - name: check for micon_shutdown.py update
+   #   run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
     - name: check for updated bookworm installer
       run: curl -sL "http://ftp.nl.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" 2>/dev/null | md5sum > /tmp/source

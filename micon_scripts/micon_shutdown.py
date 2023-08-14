@@ -47,7 +47,7 @@ def shutdownV3(port):
 	test.port.close()
 
 
-for port in ["/dev/ttyS1","/dev/ttyS3"]:
+for port in ["/dev/ttyS1"]:
 	try:
 		test = libmicon.micon_api(port)
 	except:
@@ -60,7 +60,7 @@ for port in ["/dev/ttyS1","/dev/ttyS3"]:
 	test.port.close()
 
 
-for port in ["/dev/ttyUSB0","/dev/ttyS1","/dev/ttyS0"]:
+for port in ["/dev/ttyS0"]:
 	try:
 		test = libmicon.micon_api_v3(port)
 	except:

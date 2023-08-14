@@ -1,5 +1,6 @@
 
 ## send MiconV2 watchdog disable cmd
+## should be harmless on intel micon v3 devs, though want better logic for the future.
 /source/micro-evtd -s 0003
 
 #if that succeeded setup LCD/LEDS via MiconV2
@@ -17,26 +18,25 @@ if [ $? -eq 0 ]; then
   ##try changing the lcd color
   /source/micro-evtd -s 02500007,02510006
 
-  exit 0
+else
 
-fi
+  ## send MiconV3 get version command
+  ## probably harmless on miconv2 devs but may as well avoid.
+  /source/micro-evtd -p /dev/ttyS0 -s3 "VER_GET"
 
-## send MiconV3 get version command
-/source/micro-evtd -s3 "VER_GET"
+  #if that succeeded setup LCD/LEDS via MiconV3
+  if [ $? -eq 0 ]; then
 
-#if that succeeded setup LCD/LEDS via MiconV3
-if [ $? -eq 0 ]; then
+    ## diable startup watchdog if present
+    /source/micro-evtd -p /dev/ttyS0 -s3 "BOOT_END"
 
-  ## diable startup watchdog if present
-  /source/micro-evtd -s3 "BOOT_END"
+    ## Set Power LED to on
+    /source/micro-evtd -p /dev/ttyS0 -s3 "LED_ON 0"
 
-  ## Set Power LED to on
-  /source/micro-evtd -s3 "LED_ON 0"
+    ## set LCD message
+    /source/micro-evtd -p /dev/ttyS0 -s3 "LCD_PUTS 0 Terastation x86","LCD_PUTS 1 Debian Installer"
 
-  ## set LCD message
-  /source/micro-evtd -s3 "LCD_PUTS 0 Terastation x86","LCD_PUTS 1 Debian Installer"
-
-  exit 0
+  fi
 fi
 
 modprobe ahci
