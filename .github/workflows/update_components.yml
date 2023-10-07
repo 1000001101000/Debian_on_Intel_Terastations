@@ -19,19 +19,19 @@ jobs:
       run: apt-get update
     - name: install needed tools
       run: apt-get -y install wget git curl
-    - name: check for micro-etvd update
-      run: wget -O /tmp/micro-evtd-amd64 "https://github.com/1000001101000/micro-evtd/raw/master/bins/micro-evtd-amd64" 2>/dev/null; cat /tmp/micro-evtd-amd64 | md5sum > /tmp/source 
-    - name: check for micro-etvd update
-      run: curl -sL https://github.com/${{github.repository}}/raw/master/micro-evtd 2>/dev/null | md5sum > /tmp/dest
-    - name: check for micro-etvd update
-      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
+    #- name: check for micro-etvd update
+     # run: wget -O /tmp/micro-evtd-amd64 "https://github.com/1000001101000/micro-evtd/raw/master/bins/micro-evtd-amd64" 2>/dev/null; cat /tmp/micro-evtd-amd64 | md5sum > /tmp/source 
+  #  - name: check for micro-etvd update
+   #   run: curl -sL https://github.com/${{github.repository}}/raw/master/micro-evtd 2>/dev/null | md5sum > /tmp/dest
+ #   - name: check for micro-etvd update
+#      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV 
       
-    - name: check for libmicon.py update
-      run: wget -O /tmp/libmicon.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/libmicon.py" 2>/dev/null; cat /tmp/libmicon.py | md5sum > /tmp/source 
-    - name: check for libmicon.py update
-      run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/libmicon.py  2>/dev/null | md5sum > /tmp/dest
-    - name: check for libmicon.py update
-      run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV  
+ #   - name: check for libmicon.py update
+ #     run: wget -O /tmp/libmicon.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/libmicon.py" 2>/dev/null; cat /tmp/libmicon.py | md5sum > /tmp/source 
+  #  - name: check for libmicon.py update
+   #   run: curl -sL https://github.com/${{github.repository}}/raw/master/micon_scripts/libmicon.py  2>/dev/null | md5sum > /tmp/dest
+   # - name: check for libmicon.py update
+    #  run: diff /tmp/source /tmp/dest || echo "commit_needed=yes" >> $GITHUB_ENV  
       
    # - name: check for micon_startup.py update
    #   run: wget -O /tmp/micon_startup.py "https://github.com/1000001101000/Python_buffalo_libmicon/raw/master/micon_startup.py" 2>/dev/null; cat /tmp/micon_startup.py | md5sum > /tmp/source 
