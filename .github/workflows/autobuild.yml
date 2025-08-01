@@ -15,16 +15,11 @@ jobs:
       build_needed: no
       versions: "Bullseye Bookworm"
     steps:
-    - name: checkout via standard action
+    - name: checkout via standard action and update images if needed
       uses: actions/checkout@v4
-
-    - name: check rebuild flag
-      run: echo "build_needed=$(cat .rebuild)" >> $GITHUB_ENV
-
-    - name: update images if needed
-      if: env.build_needed == 'yes'
       run: |
         set -e
+        [ "$(cat .rebuild)" == "yes" ]
         apt-get update
         apt-get -y install curl gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
         git config user.name "workflow@github"; git config user.email "workflow@github"
