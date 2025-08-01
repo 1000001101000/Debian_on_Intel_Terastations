@@ -27,8 +27,9 @@ jobs:
           oldbase="$(curl -sL "https://github.com/${{github.repository}}/raw/master/installer-image/$x/build/last_build.txt" 2>/dev/null)"
           newbase="$(curl -sL "http://ftp.nl.debian.org/debian/dists/${x,,}/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" 2>/dev/null | md5sum)"
           echo $oldbase $newbase
-          [ "$oldbase" != "$newbase" ] && echo "commit_needed=yes" >> $GITHUB_ENV
+          [ "$oldbase" != "$newbase" ] && echo "yes" #> .rebuild
           done
+          exit 0
           [ "$(cat .rebuild)" = "yes" ] || exit 0
           apt-get update
           apt-get -y install curl gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
