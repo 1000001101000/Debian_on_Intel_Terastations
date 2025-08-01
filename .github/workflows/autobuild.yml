@@ -8,6 +8,10 @@ on:
   schedule:
       - cron: "15 * * * *"
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,7 +26,6 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           set -e
-          echo ${{github.repository}}
           for x in ${{env.versions}}; do
           oldbase="$(curl -sL "https://github.com/${{github.repository}}/raw/master/installer-image/$x/build/last_build.txt" 2>/dev/null)"
           newbase="$(curl -sL "http://ftp.nl.debian.org/debian/dists/${x,,}/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" 2>/dev/null | md5sum)"
