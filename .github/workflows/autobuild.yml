@@ -2,83 +2,39 @@ name: Generate new images if needed
 
 on:
   push:
-    paths: 
+    paths:
       - '.rebuild'
-  schedule: 
-      - cron: "*/15 * * * *"
-      
+  schedule:
+      - cron: "15 * * * *"
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: 'debian:11'
+    container: 'debian:12'
     env:
-      repo_dir: .
       build_needed: no
-    steps: 
-    - name: update apt
-      run: apt-get update
-    
-    - name: install curl
-      run: apt-get -y install curl
-    
-    ##check for build flag, 
-    - name: check for the build needed flag
-      run: echo "build_needed=$(curl -sL https://github.com/1000001101000/Debian_on_Intel_Terastations/raw/master/.rebuild 2>/dev/null)" >> $GITHUB_ENV 
-    
-    - name: ensure build packages are installed
+      versions: "Bullseye Bookworm"
+    steps:
+    - name: checkout via standard action
+      uses: actions/checkout@v4
+
+    - name: check rebuild flag
+      run: echo "build_needed=$(cat .rebuild)" >> $GITHUB_ENV
+
+    - name: update images if needed
       if: env.build_needed == 'yes'
-      run: apt-get -y install gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
-    
-    - name: if needed, clone the repo for build
-      if: env.build_needed == 'yes'
-      run: git clone https://github.com/${{github.repository}}; echo "repo_dir=$(ls -rt | tail -n 1)" >> $GITHUB_ENV
-    
-    - name: set git user name
-      if: env.build_needed == 'yes'
-      run: git config user.name "workflow@github"; git config user.email "workflow@github"
-      working-directory: "${{env.repo_dir}}"
-    
-    - name: build bookworm installer
-      if: env.build_needed == 'yes'
-      run: cd installer-image/Bookworm/build/; ./generate_images.sh
-      working-directory: "${{env.repo_dir}}"
-    
-    - name: copy bookworm image to repo
-      if: env.build_needed == 'yes'
-      run: cp installer-image/Bookworm/build/output/*.iso installer-image/Bookworm/
-      working-directory: "${{env.repo_dir}}"
-      
-    - name: update bookworm base installer hash
-      if: env.build_needed == 'yes'
-      run: cat installer-image/Bookworm/build/debian-files/initrd.gz | md5sum > installer-image/Bookworm/build/last_build.txt
-      working-directory: "${{env.repo_dir}}"
-      
-    - name: build Bullseye installer
-      if: env.build_needed == 'yes'
-      run: cd installer-image/Bullseye/build/; ./generate_images.sh
-      working-directory: "${{env.repo_dir}}"
-      
-    - name: copy Bullseye image to repo
-      if: env.build_needed == 'yes'
-      run: cp installer-image/Bullseye/build/output/*.iso installer-image/Bullseye/
-      working-directory: "${{env.repo_dir}}"
-      
-    - name: update bullseye base installer hash
-      if: env.build_needed == 'yes'
-      run: cat installer-image/Bullseye/build/debian-files/initrd.gz | md5sum > installer-image/Bullseye/build/last_build.txt
-      working-directory: "${{env.repo_dir}}"
-    
-    - name: clear rebuild needed flag 
-      if: env.build_needed == 'yes'
-      run: echo no > .rebuild
-      working-directory: "${{env.repo_dir}}"
-      
-    - name: if needed, commit
-      if: env.build_needed == 'yes'
-      run: git commit -v -a -m "update installer images"
-      working-directory: "${{env.repo_dir}}"
-  
-    - name: commit new images
-      if: env.build_needed == 'yes'
-      run: git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
-      working-directory: "${{env.repo_dir}}"
+      run: |
+        set -e
+        apt-get update
+        apt-get -y install curl gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
+        git config user.name "workflow@github"; git config user.email "workflow@github"
+        for x in ${{env.versions}}; do
+        cd "installer-image/$x/build/"
+        ./generate_images.sh
+        cp output/*.iso installer-image/$x/
+        cat debian-files/initrd.gz | md5sum > last_build.txt
+        cd -; done
+        echo no > .rebuild
+        git config user.name "workflow@github"; git config user.email "workflow@github"
+        git commit -v -a -m "update installer images"
+        git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
