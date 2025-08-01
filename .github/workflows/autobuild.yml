@@ -22,8 +22,6 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           set -e
-          pwd
-          ls -la
           [ "$(cat .rebuild)" = "yes" ] || exit 0
           apt-get update
           apt-get -y install curl gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
@@ -31,7 +29,7 @@ jobs:
           for x in ${{env.versions}}; do
           cd "installer-image/$x/build/"
           ./generate_images.sh
-          cp output/*.iso installer-image/$x/
+          cp output/*.iso ../
           cat debian-files/initrd.gz | md5sum > last_build.txt
           cd -; done
           echo no > .rebuild
