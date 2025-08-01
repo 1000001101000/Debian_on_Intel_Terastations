@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.rebuild'
+      - '.github/workflows/autobuild.yml'
   schedule:
       - cron: "15 * * * *"
 
