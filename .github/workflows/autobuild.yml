@@ -18,10 +18,12 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           set -e
+          pwd
+          ls -la
+          git config --global --add safe.directory $PWD
           [ "$(cat .rebuild)" = "yes" ] || exit 0
           apt-get update
           apt-get -y install curl gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
-          git config --global --add safe.directory $PWD
           git config user.name "workflow@github"; git config user.email "workflow@github"
           for x in ${{env.versions}}; do
           cd "installer-image/$x/build/"
