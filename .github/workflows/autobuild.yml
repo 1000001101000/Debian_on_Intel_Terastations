@@ -16,7 +16,9 @@ jobs:
       build_needed: no
       versions: "Bullseye Bookworm"
     steps:
-      - run: git config --global --add safe.directory $PWD
+      - run: |
+          apt-get update; apt-get -y install git
+          git config --global --add safe.directory $PWD
       - uses: actions/checkout@v4
       - run: |
           set -e
