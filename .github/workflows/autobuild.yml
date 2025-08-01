@@ -10,18 +10,18 @@ on:
 
 jobs:
   build:
-    #runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     container: 'debian:12'
     env:
       build_needed: no
       versions: "Bullseye Bookworm"
     steps:
+      - run: git config --global --add safe.directory $PWD
       - uses: actions/checkout@v4
       - run: |
           set -e
           pwd
           ls -la
-          git config --global --add safe.directory $PWD
           [ "$(cat .rebuild)" = "yes" ] || exit 0
           apt-get update
           apt-get -y install curl gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
