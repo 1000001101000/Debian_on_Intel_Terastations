@@ -17,18 +17,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-        set -e
-        [ "$(cat .rebuild)" == "yes" ]
-        apt-get update
-        apt-get -y install curl gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
-        git config user.name "workflow@github"; git config user.email "workflow@github"
-        for x in ${{env.versions}}; do
-        cd "installer-image/$x/build/"
-        ./generate_images.sh
-        cp output/*.iso installer-image/$x/
-        cat debian-files/initrd.gz | md5sum > last_build.txt
-        cd -; done
-        echo no > .rebuild
-        git config user.name "workflow@github"; git config user.email "workflow@github"
-        git commit -v -a -m "update installer images"
-        git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
+          set -e
+          [ "$(cat .rebuild)" == "yes" ]
+          apt-get update
+          apt-get -y install curl gzip rsync wget cpio mtools git isolinux xz-utils xorriso syslinux-utils genisoimage
+          git config user.name "workflow@github"; git config user.email "workflow@github"
+          for x in ${{env.versions}}; do
+          cd "installer-image/$x/build/"
+          ./generate_images.sh
+          cp output/*.iso installer-image/$x/
+          cat debian-files/initrd.gz | md5sum > last_build.txt
+          cd -; done
+          echo no > .rebuild
+          git config user.name "workflow@github"; git config user.email "workflow@github"
+          git commit -v -a -m "update installer images"
+          git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:master
