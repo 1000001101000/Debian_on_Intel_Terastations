@@ -6,7 +6,7 @@ on:
       - '.rebuild'
       - '.github/workflows/autobuild.yml'
   schedule:
-      - cron: "15 * * * *"
+      - cron: "35 3 * * *"
 
 defaults:
   run:
