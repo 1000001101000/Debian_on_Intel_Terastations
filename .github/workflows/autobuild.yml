@@ -18,7 +18,7 @@ jobs:
     container: 'debian:12'
     env:
       build_needed: no
-      versions: "Bullseye Bookworm"
+      versions: "Bookworm Trixie"
     steps:
       - run: |
           apt-get update; apt-get -y install git curl
