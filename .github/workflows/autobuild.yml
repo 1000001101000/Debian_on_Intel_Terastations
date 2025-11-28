@@ -42,6 +42,7 @@ jobs:
           cd "installer-image/$x/build/"
           ./generate_images.sh
           cp output/*.iso ../
+          git add ../*.iso
           cat debian-files/initrd.gz | md5sum > last_build.txt
           cd -; done
           echo no > .rebuild
