@@ -28,9 +28,11 @@ jobs:
           set -e
           echo "running"
           for x in ${{env.versions}}; do
+          echo "$x"
           oldbase="$(curl -sL "https://github.com/${{github.repository}}/raw/master/installer-image/$x/build/last_build.txt")"
           newbase="$(curl -sL "http://ftp.nl.debian.org/debian/dists/${x,,}/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz" | md5sum)"
           [ "$oldbase" != "$newbase" ] && echo "yes" > .rebuild
+          echo $oldbase $newbase
           done
           [ "$(cat .rebuild)" = "yes" ] || exit 0
           apt-get update
